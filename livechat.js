@@ -1,11 +1,11 @@
 
 (function ( $ ) {
     var templateOptions = null;
-
+	
     $.fn.cmLivechat = function( options ) {
 
         var settings = $.extend({
-
+            
             template: 'G0kO1c9QB5xquPp',
 			siteUrl: 'https://cmtest.voipshop.lt',
             socketUrl: 'https://cmtest.voipshop.lt',
@@ -26,25 +26,25 @@
 			span.className = 'fa';
 			span.style.display = 'none';
 			document.body.insertBefore(span, document.body.firstChild);
-
+			
 			if ((css(span, 'font-family')) !== 'FontAwesome') {
 				$('head').append("<link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css' rel='stylesheet'>");
 				$('head').append("<script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/js/all.min.js'></script>");
-
+				
 
 			}
-
+			
 			if(typeof io == 'undefined')
 				$('head').append("<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js'></script>")
 			if(typeof jQuery == 'undefined')
 				$('head').append("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>");
-
+				
 			document.body.removeChild(span);
 			setTimeout(function()
 			{
             if(checkCookie('cmLivechat_chatID'))
 			{
-
+                
 				renderChatWindow();
 				$('head').append('<style>.cmLivechat_required::after { content:" *";color: '+templateOptions.livechat.errorColor+';} #cmLivechat_icDropper>p{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropper>span{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropper>i{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropper>input{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropperNWH>p{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropperNWH>span{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropperNWH>i{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropperNWH>input{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_header>p{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_header>span{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_header>i{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_header>input{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_footer>p{font-size:.7em;font-family:Arial,Helvetica,sans-serif;margin-bottom:1em}#cmLivechat_footer>span{font-size:.7em;font-family:Arial,Helvetica,sans-serif;margin-bottom:1em}#cmLivechat_footer>i{font-size:.7em;font-family:Arial,Helvetica,sans-serif;margin-bottom:1em}#cmLivechat_footer>input{font-size:.7em;font-family:Arial,Helvetica,sans-serif;margin-bottom:1em}</style>');
 			}
@@ -52,7 +52,7 @@
 			{
 				$('head').append('<style>.cmLivechat_required::after { content:" *";color: '+templateOptions.livechat.errorColor+';} #cmLivechat_icDropper>p{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropper>span{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropper>i{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropper>input{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropperNWH>p{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropperNWH>span{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropperNWH>i{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_icDropperNWH>input{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_header>p{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_header>span{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_header>i{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_header>input{font-size:.7em;line-height:1.5;font-family:Arial,Helvetica,sans-serif}#cmLivechat_footer>p{font-size:.7em;font-family:Arial,Helvetica,sans-serif;margin-bottom:1em}#cmLivechat_footer>span{font-size:.7em;font-family:Arial,Helvetica,sans-serif;margin-bottom:1em}#cmLivechat_footer>i{font-size:.7em;font-family:Arial,Helvetica,sans-serif;margin-bottom:1em}#cmLivechat_footer>input{font-size:.7em;font-family:Arial,Helvetica,sans-serif;margin-bottom:1em}</style>');
                 renderWindow();
-
+				
             }
 			renderPopupButton();
 			},2000);
@@ -94,7 +94,7 @@
     }
 	$(window).on('resize', function(){
       var win = $(this); //this = window
-
+      
       if (win.width() < 600) {
 
 		  $('#cmLivechat_container').css('width','100%');
@@ -102,34 +102,34 @@
 		  $('#cmLivechat_container').css('top','0');
 		  $('#cmLivechat_container').css('bottom','auto');
 		  $('#cmLivechat_container').css('right','auto');
-
+		  
 		  $('#cmLivechat_header').css('width','100%');
-
-		  $('#cmLivechat_icDropper').css('width','auto');
+		  
+		  $('#cmLivechat_icDropper').css('width','auto');	
 		  $('#cmLivechat_icDropper').css('height','70%');
-		  $('#cmLivechat_icDropperNWH').css('width','auto');
+		  $('#cmLivechat_icDropperNWH').css('width','auto');	
 		  $('#cmLivechat_icDropperNWH').css('height','70%');
-
-		  $('#cmLivechat_chat').css('width','auto');
-		  $('#cmLivechat_chat').css('height','70%');
-
+		  
+		  $('#cmLivechat_chat').css('width','auto');		  
+		  $('#cmLivechat_chat').css('height','70%');		  
+		  
 		  $('#cmLivechat_chatMessage').css('width','97% !important');
 		  //$('#cmLivechat_chatMessage').css('height','20px');
-
+		  
 		  $('#cmLivechat_sendChatMessage').css('width','auto');
 		  $('#cmLivechat_sendChatMessage').css('height','34px');
 		  $('#cmLivechat_sendChatMessage').css('right','10px');
-
+		  
 		  $('#cmLivechat_footer').css('width','auto');
 		  $('#cmLivechat_footer').css('height','45px');
 		  $('#cmLivechat_footer').css('padding','10px');
-
+		  
 		  $('#cmLivechat_container').css('z-index','10000');
 		  $('#cmLivechat_popupButton').css('z-index','9999');
-
-
+		  
+		   		
 		  }
-
+		  
 		if (win.width() > 650) {
 
 		  $('#cmLivechat_container').css('width','300px');
@@ -137,39 +137,39 @@
 		  $('#cmLivechat_container').css('top','auto');
 		  $('#cmLivechat_container').css('bottom','35%');
 		  $('#cmLivechat_container').css('right','4%');
-
+		  
 		  $('#cmLivechat_header').css('width','300px');
-
-		  $('#cmLivechat_icDropper').css('width','290px');
+		  
+		  $('#cmLivechat_icDropper').css('width','300px');	
 		  $('#cmLivechat_icDropper').css('height','405px');
-		   $('#cmLivechat_icDropper').css('width','290px');
+		   $('#cmLivechat_icDropper').css('width','300px');	
 		  $('#cmLivechat_icDropper').css('height','405px');
-
-		  $('#cmLivechat_chat').css('width','290px');
-		  $('#cmLivechat_chat').css('height','280px');
-
+		  
+		  $('#cmLivechat_chat').css('width','300px');		  
+		  $('#cmLivechat_chat').css('height','280px');		  
+		  
 		  $('#cmLivechat_chatMessage').css('width','97% !important');
 		  //$('#cmLivechat_chatMessage').css('height','20px');
-
+		  
 		  $('#cmLivechat_sendChatMessage').css('width','auto');
 		  $('#cmLivechat_sendChatMessage').css('height','auto');
-
+		  
 		  $('#cmLivechat_footer').css('width','300px');
 		  $('#cmLivechat_footer').css('height','30px');
 		  $('#cmLivechat_footer').css('padding','0px');
-
+		  
 		  $('#cmLivechat_container').css('z-index','10000');
 		  $('#cmLivechat_popupButton').css('z-index','10000');
-
-
-
-		  }
+		  
+		  
+		   		
+		  }  
 		});
 
     function renderChatWindow()
     {
-
-
+		
+		
         var cssBtn = 'display: inline-block;margin-bottom: 0;margin-top:0;margin-left:0.3em;margin-right:0.3em;font-weight: 400;text-align: center;vertical-align: middle;touch-action: manipulation;cursor: pointer;background-image: none;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 0.7em;line-height: 1.42857143;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
         var cssFormControl = 'display: block; width: 90%;height: 20px; padding: 6px 12px;font-size: 0.7em;line-height: 1.42857143;background-color: #fff;background-image: none;border: 1px solid #ccc; border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075); box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;min-height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
         $('body').append("<div id='cmLivechat_container' style='width:300px;height:400px;position:fixed;bottom:35%;right:4%;display:none;box-sizing:initial;font-size:initial;border-radius:200px;z-index:10000;'></div>");
@@ -185,7 +185,7 @@
         $('#cmLivechat_header').append("<span id='cmLivechat_soundOn'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+" fa-bell' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
         $('#cmLivechat_header').append("<span id='cmLivechat_soundOff' style='display:none;'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+" fa-bell-slash' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
 
-        $('#cmLivechat_container').append("<div id='cmLivechat_icDropper' style='background-color: " + templateOptions.livechat.fgColor + ";width:290px;height:405px;overflow:auto;overflow-x:hidden;padding-left:5px;padding-right:5px;position:relative;'></div>");
+        $('#cmLivechat_container').append("<div id='cmLivechat_icDropper' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:405px;overflow:auto;overflow-x:hidden;padding-left:5px;padding-right:5px;position:relative;'></div>");
         $('#cmLivechat_container').append("<div id='cmLivechat_footer' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:30px;border-bottom-left-radius:10px;border-bottom-right-radius:10px;'></div>");
         $('#cmLivechat_footer').append("<small style='color:"+templateOptions.livechat.tdfcColor+";float:right;font-size: 0.6em;padding:3px;'>powered by C-Monitor</small>");
 
@@ -229,8 +229,8 @@
         $('#cmLivechat_icDropper').empty();
         $('#cmLivechat_icDropper').append('<textarea rows="5" id="cmLivechat_chatMessage" type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:97% !important;position:absolute;bottom:22px;resize: none;margin-left:0px;height:90px;" ></textarea>');
 		$('#cmLivechat_icDropper').append('<button id="cmLivechat_sendChatMessage" type="button" style="'+cssBtn+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:auto;height:34px;position:absolute;background-color:transparent;padding:0;margin:0;bottom:0px;font-size:23px;right:0px;text-transform:none;"><i class="'+(settingsOptions.v4FontAwesome ? "fa " : "fab ")+'fa-telegram-plane"></i></button>');
-
-        $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:290px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;word-wrap:break-word'></div>");
+		
+        $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;word-wrap:break-word'></div>");
 
         $.getJSON(window.cmLivechat_siteUrl+'/livechat/chathistory/'+getCookie('cmLivechat_chatID'), function( data ) {
             console.log(data);
@@ -265,7 +265,7 @@
 									$('#cmLivechat_container').css('display','initial');
 								}
 				if(window.cmLivechat_soundWorks)
-				playAudio();
+				playAudio();				
             });
             var input = document.getElementById("cmLivechat_chatMessage");
 
@@ -285,15 +285,15 @@
                     document.getElementById("cmLivechat_sendChatMessage").click();
 					}
                 }
-
+				
             });
 					/*$('#cmLivechat_chatMessage').on('keyup',function(e){
-			var maxHeight = 94;
+			var maxHeight = 94; 
 			document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
-			var f = document.getElementById('cmLivechat_chatMessage');
-			if (f.clientHeight < f.scrollHeight && f.scrollHeight < maxHeight )
+			var f = document.getElementById('cmLivechat_chatMessage'); 
+			if (f.clientHeight < f.scrollHeight && f.scrollHeight < maxHeight ) 
 				{ f.style.height = f.scrollHeight + 'px'; }
-			});  */
+			});  */    
             $('#cmLivechat_sendChatMessage').click(function()
             {
 				var formattedDate = '<span style="font-size:0.6em;">'+(new Date().getHours() < 10 ? '0'+new Date().getHours() : new Date().getHours())+":"+(new Date().getMinutes() < 10 ? '0'+new Date().getMinutes() : new Date().getMinutes())+"</span><br>";
@@ -334,17 +334,17 @@
             });
 
         });
-
-
+		
+		
     }
-
+	
 	async function playAudio() {
-	  var audio = new Audio(window.cmLivechat_siteUrl+'/juntos.mp3');
+	  var audio = new Audio(window.cmLivechat_siteUrl+'/juntos.mp3');  
 	  audio.type = 'audio/mp3';
 
-
+	  
 		await audio.play();
-
+		
 	}
 
     function renderPopupButton()
@@ -353,7 +353,7 @@
         var windowDiv = "<div class='text-center' id='cmLivechat_popupButton' style='color: "+(templateOptions.livechat ? templateOptions.livechat.mfcColor : '#ccc') +';background-color:'+(templateOptions.livechat ?  templateOptions.livechat.bgColor :'#133a61')+";width:60px;height:60px;border-radius:50%;position: fixed;bottom:12.5%;right:3%;z-index:10000;'></div>";
         $('body').append(windowDiv);
 		if(settingsOptions.v4FontAwesome)
-		{
+		{	
 			templateOptions.livechat.iconActive = 'fa ' + templateOptions.livechat.iconActive.split(' ')[1];
 			templateOptions.livechat.iconInactive = 'fa ' + templateOptions.livechat.iconInactive.split(' ')[1];
 		}
@@ -362,7 +362,7 @@
 		setTimeout(function()
 		{
 		var foundWidthOpen = 0;
-		var foundHeightOpen = 0;
+		var foundHeightOpen = 0;	
 		if($('#cmLivechat_iconOpen').children()[0].nodeName.toUpperCase() == 'I')
 		{
 			foundWidthOpen = Math.ceil(parseInt($('#cmLivechat_iconOpen').children()[0].getBoundingClientRect().width,10));
@@ -373,15 +373,15 @@
 		 foundWidthOpen = Math.ceil(parseInt($($('#cmLivechat_iconOpen').children()[0]).children()[0].getBoundingClientRect().width,10));
 		 foundHeightOpen = Math.ceil(parseInt($($('#cmLivechat_iconOpen').children()[0]).children()[0].getBoundingClientRect().height,10));
 		}
-
-
+		
+		
 		var calculatedMarginOpenLeft = (60 - foundWidthOpen) / 2;
 		var calculatedMarginOpenTop = (60 - foundHeightOpen) / 2;
 		$($('#cmLivechat_iconOpen').children()[0]).css('margin-left',calculatedMarginOpenLeft+'px');
 		$($('#cmLivechat_iconOpen').children()[0]).css('margin-top',calculatedMarginOpenTop+'px');
-
-
-
+		
+		
+		
 		$('#cmLivechat_iconClosed').css('display','initial');
 		var foundWidthClosed = 0;
 		var foundHeightClosed = 0;
@@ -395,34 +395,34 @@
 		foundWidthClosed = Math.ceil(parseInt($($('#cmLivechat_iconClosed').children()[0]).children()[0].getBoundingClientRect().width,10));
 		foundHeightClosed = Math.ceil(parseInt($($('#cmLivechat_iconClosed').children()[0]).children()[0].getBoundingClientRect().height,10));
 		}
-
-
-
-
+		
+		
+		
+		
 		var calculatedMarginClosedLeft = (60 - foundWidthClosed) / 2;
 		var calculatedMarginClosedTop = (60 - foundHeightClosed) / 2;
-
+	
 		$('#cmLivechat_iconClosed').css('display','none');
 		$($('#cmLivechat_iconClosed').children()[0]).css('margin-left',calculatedMarginClosedLeft+'px');
 		$($('#cmLivechat_iconClosed').children()[0]).css('margin-top',calculatedMarginClosedTop+'px');
-
+		
 		if(templateOptions.livechat.iconInactive.includes('fa-times'))
 		{
 			$('#cmLivechat_iconClosed > svg').css('margin-left','21.5px');
 			$('#cmLivechat_iconClosed > svg').css('margin-top','17.5px');
-
+			
 			$('#cmLivechat_iconClosed > i').css('margin-left','0px');
 			$('#cmLivechat_iconClosed > i').css('margin-top','16px');
 		}
 		if(templateOptions.livechat.iconActive.includes('fa-comment'))
 		{
-
-
-			$('#cmLivechat_iconClosed > i').css('margin-left','0px');
-			$('#cmLivechat_iconClosed > i').css('margin-top','16px');
+			
+			
+			$('#cmLivechat_iconOpen > i').css('margin-left','0px');
+			$('#cmLivechat_iconOpen > i').css('margin-top','16px');
 		}
-
-
+		
+		
 		},100);
 
         window.cmLivechatIsOpen = false;
@@ -437,7 +437,7 @@
 				var objDiv = document.getElementById("cmLivechat_chat");
 				if(objDiv)
 				objDiv.scrollTop = objDiv.scrollHeight;
-
+			
             }
             if(window.cmLivechatIsOpen == false)
             {
@@ -452,7 +452,7 @@
 				}
 				$('#cmLivechat_container').css('bottom','35%');
 				$('#cmLivechat_container').css('height','405px');
-
+				
             }
 
 
@@ -480,7 +480,7 @@
 	}
     function renderWindow()
     {
-
+		
 
         var cssBtn = 'display: inline-block;margin-bottom: 0;margin-top:0;margin-left:0.3em;margin-right:0.3em;font-weight: 400;text-align: center;vertical-align: middle;touch-action: manipulation;cursor: pointer;background-image: none;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 0.7em;line-height: 1.42857143;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
         var cssFormControl = 'display: inline-block; width: 85%;height: 20px; padding: 6px 12px;font-size: 0.7em;line-height: 1.42857143;background-color: #fff;background-image: none;border: 1px solid #ccc; border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075); box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;min-height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;margin-left:10px;';
@@ -497,18 +497,18 @@
             $('#cmLivechat_header').append("<span id='cmLivechat_soundOn'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+" fa-bell' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
             $('#cmLivechat_header').append("<span id='cmLivechat_soundOff' style='display:none;'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+" fa-bell-slash' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
 
-        $('#cmLivechat_container').append("<div id='cmLivechat_icDropper' style='background-color: " + templateOptions.livechat.fgColor + ";width:290px;height:405px;overflow:auto;overflow-x:hidden;padding-left:5px;padding-right:5px;position:relative;'></div>");
-        $('#cmLivechat_container').append("<div id='cmLivechat_icDropperNWH' style='background-color: " + templateOptions.livechat.fgColor + ";width:290px;height:405px;overflow:auto;overflow-x:hidden;padding-left:5px;padding-right:5px;position:relative;display:none'></div>");
+        $('#cmLivechat_container').append("<div id='cmLivechat_icDropper' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:405px;overflow:auto;overflow-x:hidden;padding-left:5px;padding-right:5px;position:relative;'></div>");
+        $('#cmLivechat_container').append("<div id='cmLivechat_icDropperNWH' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:405px;overflow:auto;overflow-x:hidden;padding-left:5px;padding-right:5px;position:relative;display:none'></div>");
 		//Initial greeting
-		$('#cmLivechat_container').append("<div id='cmLivechat_igDropper' style='background-color: " + templateOptions.livechat.fgColor + ";width:290px;height:105px;overflow:auto;overflow-x:hidden;padding-left:5px;padding-right:5px;position:relative;display:none'></div>");
+		$('#cmLivechat_container').append("<div id='cmLivechat_igDropper' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:105px;overflow:auto;overflow-x:hidden;padding-left:5px;padding-right:5px;position:relative;display:none'></div>");
 		 var htmlGreeting = '<p style="border-radius:10px;margin:5px;margin-left:10px;padding:5px;background-color:'+templateOptions.livechat.tdbgColor+';color:' + templateOptions.livechat.tdfcColor + '">' + templateOptions.livechat.initialGreeting + '</p>';
-
+		 
 		 htmlGreeting += '<div style="display:flex;justify-content:center;margin:10px;"><button type="button" id="cmLivechat_greetingButton" style="'+cssBtn+' color:' +templateOptions.livechat.mfcColor + ';background-color:' + templateOptions.livechat.bgColor + '"  >';
          var value = templateOptions.livechat.initialGreetingButtonText;
          htmlGreeting += value;
          htmlGreeting += '</button></div>';
          $('#cmLivechat_igDropper').append(htmlGreeting);
-
+		 
 		 $('#cmLivechat_greetingButton').click(function()
 		 {
 				$('#cmLivechat_iconClosed').css('display','initial');
@@ -524,8 +524,8 @@
 				$('#cmLivechat_container').css('height','405px');
 				  window.cmLivechatIsOpen = true;
 		 });
-
-
+		
+        
 		$('#cmLivechat_container').append("<div id='cmLivechat_footer' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:30px;border-bottom-left-radius:10px;border-bottom-right-radius:10px;'></div>");
         $('#cmLivechat_footer').append("<small style='color:"+templateOptions.livechat.tdfcColor+";float:right;font-size: 0.6em;padding:3px;'>powered by C-Monitor</small>");
 
@@ -556,7 +556,7 @@
 
                     window.cmLivechat_icDataNWH.push({type: 'label', id: id, data: dataText,alignment: initialDataNWH[j].alignment});
                     $('#cmLivechat_icDropperNWH').append(htmlToAdd);
-                    break;
+                    break;	
                 case 'textinput':
 					var extraRequired = '<span '+(initialDataNWH[j].required == true? "class='cmLivechat_required'" : "")+'></span>';
                     htmlToAdd = '<input type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + '" id="' + id + '"';
@@ -681,7 +681,7 @@
                     var placeholder = initialDataNWH[j].placeholder;
                     var name = initialDataNWH[j].name;
 					var pattern = initialDataNWH[j].pattern;
-
+					
                     if (value != '')
                         htmlToAdd += ' value="' + value + '"';
                     if (placeholder != '')
@@ -765,7 +765,7 @@
                     htmlToAdd += '</select>'+extraRequired;
                     window.cmLivechat_icDataNWH.push({type: 'dropdown', id: id, name: name, options: dataArray});
                     $('#cmLivechat_icDropperNWH').append(htmlToAdd);
-
+					
                     break;
                 case 'group_dropdown':
 					var extraRequired = '<span '+(initialDataNWH[j].required == true? "class='cmLivechat_required'" : "")+'></span>';
@@ -777,7 +777,7 @@
                     htmlToAdd += '</select>'+extraRequired;
                     window.cmLivechat_icDataNWH.push({type: 'group_dropdown', id: id, name: name});
                     $('#cmLivechat_icDropperNWH').append(htmlToAdd);
-
+					
                     break;
                 case 'submit_btn':
                     htmlToAdd = '<div style="display:flex;justify-content:center;margin:10px;"><button  id="' + id + '" type="text"  style="'+cssBtn+' color:' +templateOptions.livechat.mfcColor + ';background-color:' + templateOptions.livechat.bgColor + '"  >';
@@ -805,7 +805,7 @@
                         dataToSend.isFirst = true;
                         dataToSend.initialData = [];
                         dataToSend.from = "";
-
+                       
 						var allGoodNWH = true;
                         for(var j = 0;j < window.cmLivechat_icDataNWH.length;j++)
                         {
@@ -813,12 +813,12 @@
                             switch(type)
                             {
                                 case 'nickname':
-
+									
 									if(window.cmLivechat_icDataNWH[j].required == true && $('#'+window.cmLivechat_icDataNWH[j].id).val().trim() == '')
 									{
 										allGoodNWH = false;
 										$('#'+window.cmLivechat_icDataNWH[j].id).css('background-color',templateOptions.livechat.errorColor);
-
+										
 									}
                                     dataToSend.initialData.push(
                                         {
@@ -835,12 +835,12 @@
 									if(pattern.test($('#'+window.cmLivechat_icDataNWH[j].id).val()) == false)
 										$('#'+window.cmLivechat_icDataNWH[j].id).css('background-color',templateOptions.livechat.errorColor);
 										allGoodNWH = false;
-
+										
 									}
 									if(window.cmLivechat_icDataNWH[j].required == true && $('#'+window.cmLivechat_icDataNWH[j].id).val().trim() == '')
 									{
 										allGoodNWH = false;
-
+										
 										$('#'+window.cmLivechat_icDataNWH[j].id).css('background-color',templateOptions.livechat.errorColor);
 									}
                                     dataToSend.initialData.push(
@@ -851,7 +851,7 @@
                                         });
                                     break;
                                 case 'number':
-
+									
 									if($('#'+window.cmLivechat_icDataNWH[j].id).attr('pattern') != '' && $('#'+window.cmLivechat_icDataNWH[j].id).attr('pattern') != undefined)
 									{
 									var pattern = new RegExp($('#'+window.cmLivechat_icDataNWH[j].id).attr('pattern'),'gi');
@@ -859,14 +859,14 @@
 									{
 										$('#'+window.cmLivechat_icDataNWH[j].id).css('background-color',templateOptions.livechat.errorColor);
 										allGoodNWH = false;
-
+										
 									}
 									}
 									if(window.cmLivechat_icDataNWH[j].required == true && $('#'+window.cmLivechat_icDataNWH[j].id).val().trim() == '')
 									{
 										allGoodNWH = false;
 										$('#'+window.cmLivechat_icDataNWH[j].id).css('background-color',templateOptions.livechat.errorColor);
-
+										
 									}
                                     dataToSend.initialData.push(
                                         {
@@ -877,8 +877,8 @@
                                         });
                                     break;
                                 case 'group_dropdown':
-
-
+								
+									
                                     dataToSend.to = $('#'+window.cmLivechat_icDataNWH[j].id).val();
                                     break;
 								case 'dropdown':
@@ -888,7 +888,7 @@
                                             name: window.cmLivechat_icDataNWH[j].name,
                                             value: $('#'+window.cmLivechat_icDataNWH[j].id).val()
                                         });
-                                    break;
+                                    break;	
 								case 'textinput':
 									if(window.cmLivechat_icDataNWH[j].required == true && $('#'+window.cmLivechat_icDataNWH[j].id).val().trim() == '')
 									{
@@ -914,12 +914,12 @@
                                             name: window.cmLivechat_icDataNWH[j].name,
                                             value: $('#'+window.cmLivechat_icDataNWH[j].id).val()
                                         });
-									break;
+									break;	
                             }
                         }
 						if(allGoodNWH == false)
 						{
-
+							
 							return;
 						}
                         if(dataToSend.to == '' || dataToSend.to == undefined || dataToSend.to == null)
@@ -934,7 +934,7 @@
                                 $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-all;">'+formattedDate+data.text+'</span><br style="clear:both;">');
                             var elem = document.getElementById('cmLivechat_chat');
                             elem.scrollTop = elem.scrollHeight;
-
+							
 							 window.cmLivechatIsOpen = true;
 								if(window.cmLivechatIsOpen)
 								{
@@ -944,9 +944,9 @@
 								}
 								if(window.cmLivechat_soundWorks)
 								playAudio();
-
+							
                         });
-
+						
                         $.post(window.cmLivechat_siteUrl+'/livechat/api/create',dataToSend, function( data ) {
                        console.log("POSTED");
 						$('#cmLivechat_icDropperNWH').empty();
@@ -955,7 +955,7 @@
                        $('#cmLivechat_icDropper').empty();
                        $('#cmLivechat_icDropper').append('<textarea rows="5" id="cmLivechat_chatMessage" type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:97% !important;position:absolute;bottom:22px;resize: none;margin-left:0px;height:90px;" ></textarea>');
 					   $('#cmLivechat_icDropper').append('<button id="cmLivechat_sendChatMessage" type="button" style="'+cssBtn+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:auto;height:34px;padding:0;background-color:transparent;position:absolute;bottom:0px;margin:0;right:0px;font-size:23px;text-transform:none;"><i class="'+(settingsOptions.v4FontAwesome ? "fa " : "fab ")+' fa-telegram-plane"></i></button>');
-                            $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:290px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;'></div>");
+                            $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;'></div>");
                             var input = document.getElementById("cmLivechat_chatMessage");
 
 // Execute a function when the user releases a key on the keyboard
@@ -974,21 +974,21 @@
 								document.getElementById("cmLivechat_sendChatMessage").click();
 								}
 							}
-
+							
 						});
 							/*$('#cmLivechat_chatMessage').on('keyup',function(e){
-							var maxHeight = 94;
+							var maxHeight = 94; 
 							document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
-							var f = document.getElementById('cmLivechat_chatMessage');
-							if (f.clientHeight < f.scrollHeight && f.scrollHeight < maxHeight )
+							var f = document.getElementById('cmLivechat_chatMessage'); 
+							if (f.clientHeight < f.scrollHeight && f.scrollHeight < maxHeight ) 
 								{ f.style.height = f.scrollHeight + 'px'; }
-							});  */
+							});  */    
                             $('#cmLivechat_sendChatMessage').click(function()
                             {
 								var formattedDate = '<span style="font-size:0.6em;">'+(new Date().getHours() < 10 ? '0'+new Date().getHours() : new Date().getHours())+":"+(new Date().getMinutes() < 10 ? '0'+new Date().getMinutes() : new Date().getMinutes())+"</span><br>";
 								//document.getElementById('cmLivechat_chatMessage').style.height = '20px';
 								//document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
-
+								
                                 if($('#cmLivechat_chatMessage').val().trim() == "") return;
                                 $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-all;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
 
@@ -1035,7 +1035,7 @@
         for (var i = 0; i < initialData.length; i++) {
             var type = initialData[i].type;
             var id = initialData[i].id;
-
+			
             var dataText = initialData[i].data;
             //console.log(initialData[i]);
             switch (type) {
@@ -1052,7 +1052,7 @@
 
                     window.cmLivechat_icData.push({type: 'label', id: id, data: dataText,alignment: initialData[i].alignment});
                     $('#cmLivechat_icDropper').append(htmlToAdd);
-                    break;
+                    break;	
                 case 'textinput':
 					var extraRequired = '<span '+(initialData[i].required == true? "class='cmLivechat_required'" : "")+'></span>';
                     htmlToAdd = '<input type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + '" id="' + id + '"';
@@ -1177,7 +1177,7 @@
                     var placeholder = initialData[i].placeholder;
                     var name = initialData[i].name;
 					var pattern = initialData[i].pattern;
-
+					
                     if (value != '')
                         htmlToAdd += ' value="' + value + '"';
                     if (placeholder != '')
@@ -1187,7 +1187,7 @@
 					if (pattern != '')
 						htmlToAdd += ' pattern="'+pattern+'"';
                     htmlToAdd += '>';
-
+					
 						htmlToAdd += extraRequired+'</label>';
                     window.cmLivechat_icData.push({
                         type: 'number',
@@ -1237,7 +1237,7 @@
 						required: initialData[i].required
                     });
                     $('#cmLivechat_icDropper').append(htmlToAdd);
-
+					
 					localIds.push(window.cmLivechat_icData[window.cmLivechat_icData.length-1].id);
 					if(initialData[i].required)
 					{
@@ -1263,7 +1263,7 @@
                     htmlToAdd += '</select>'+extraRequired;
                     window.cmLivechat_icData.push({type: 'dropdown', id: id, name: name, options: dataArray});
                     $('#cmLivechat_icDropper').append(htmlToAdd);
-
+					
                     break;
                 case 'group_dropdown':
 					var extraRequired = '<span '+(initialData[i].required == true? "class='cmLivechat_required'" : "")+'></span>';
@@ -1302,21 +1302,21 @@
                         dataToSend.isFirst = true;
                         dataToSend.initialData = [];
                         dataToSend.from = "";
-
+                       
 						var allGood = true;
-
+						
                         for(var i = 0;i < window.cmLivechat_icData.length;i++)
                         {
                             var type = window.cmLivechat_icData[i].type;
                             switch(type)
                             {
                                 case 'nickname':
-
+									
 									if(window.cmLivechat_icData[i].required == true && $('#'+window.cmLivechat_icData[i].id).val().trim() == '')
 									{
 										allGood = false;
 										$('#'+window.cmLivechat_icData[i].id).css('background-color',templateOptions.livechat.errorColor);
-
+										
 									}
                                     dataToSend.initialData.push(
                                         {
@@ -1333,12 +1333,12 @@
 									if(pattern.test($('#'+window.cmLivechat_icData[i].id).val()) == false)
 										$('#'+window.cmLivechat_icData[i].id).css('background-color',templateOptions.livechat.errorColor);
 										allGood = false;
-
+										
 									}
 									if(window.cmLivechat_icData[i].required == true && $('#'+window.cmLivechat_icData[i].id).val().trim() == '')
 									{
 										allGood = false;
-
+										
 										$('#'+window.cmLivechat_icData[i].id).css('background-color',templateOptions.livechat.errorColor);
 									}
                                     dataToSend.initialData.push(
@@ -1349,7 +1349,7 @@
                                         });
                                     break;
                                 case 'number':
-
+									
 									if($('#'+window.cmLivechat_icData[i].id).attr('pattern') != '' && $('#'+window.cmLivechat_icData[i].id).attr('pattern') != undefined)
 									{
 									var pattern = new RegExp($('#'+window.cmLivechat_icData[i].id).attr('pattern'),'gi');
@@ -1357,14 +1357,14 @@
 									{
 										$('#'+window.cmLivechat_icData[i].id).css('background-color',templateOptions.livechat.errorColor);
 										allGood = false;
-
+										
 									}
 									}
 									if(window.cmLivechat_icData[i].required == true && $('#'+window.cmLivechat_icData[i].id).val().trim() == '')
 									{
 										allGood = false;
 										$('#'+window.cmLivechat_icData[i].id).css('background-color',templateOptions.livechat.errorColor);
-
+										
 									}
                                     dataToSend.initialData.push(
                                         {
@@ -1375,8 +1375,8 @@
                                         });
                                     break;
                                 case 'group_dropdown':
-
-
+								
+									
                                     dataToSend.to = $('#'+window.cmLivechat_icData[i].id).val();
                                     break;
 								case 'dropdown':
@@ -1386,7 +1386,7 @@
                                             name: window.cmLivechat_icData[i].name,
                                             value: $('#'+window.cmLivechat_icData[i].id).val()
                                         });
-                                    break;
+                                    break;	
 								case 'textinput':
 									if(window.cmLivechat_icData[i].required == true && $('#'+window.cmLivechat_icData[i].id).val().trim() == '')
 									{
@@ -1412,12 +1412,12 @@
                                             name: window.cmLivechat_icData[i].name,
                                             value: $('#'+window.cmLivechat_icData[i].id).val()
                                         });
-									break;
+									break;	
                             }
                         }
 						if(allGood == false)
 						{
-
+							
 							return;
 						}
                         if(dataToSend.to == '' || dataToSend.to == undefined || dataToSend.to == null)
@@ -1432,7 +1432,7 @@
                                 $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-all;">'+formattedDate+data.text+'</span><br style="clear:both;">');
                             var elem = document.getElementById('cmLivechat_chat');
                             elem.scrollTop = elem.scrollHeight;
-
+							
 							 window.cmLivechatIsOpen = true;
 								if(window.cmLivechatIsOpen)
 								{
@@ -1442,16 +1442,16 @@
 								}
 								if(window.cmLivechat_soundWorks)
 								playAudio();
-
+							
                         });
-
+						
                         $.post(window.cmLivechat_siteUrl+'/livechat/api/create',dataToSend, function( data ) {
                        console.log("POSTED");
 
                        $('#cmLivechat_icDropper').empty();
                        $('#cmLivechat_icDropper').append('<textarea rows="5" id="cmLivechat_chatMessage" type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:97% !important;position:absolute;bottom:22px;resize: none;margin-left:0px;height:90px;" ></textarea>');
                        $('#cmLivechat_icDropper').append('<button id="cmLivechat_sendChatMessage" type="button" style="'+cssBtn+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:auto;height:34px;padding:0;background-color:transparent;position:absolute;bottom:0px;margin:0;right:0px;font-size:23px;text-transform:none;"><i class="'+(settingsOptions.v4FontAwesome ? "fa " : "fab ")+' fa-telegram-plane"></i></button>');
-                            $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:290px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;'></div>");
+                            $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;'></div>");
                             var input = document.getElementById("cmLivechat_chatMessage");
 
 // Execute a function when the user releases a key on the keyboard
@@ -1470,13 +1470,13 @@
 								document.getElementById("cmLivechat_sendChatMessage").click();
 								}
 							}
-
+							
 						});
 							/*$('#cmLivechat_chatMessage').on('keyup',function(e){
-							var maxHeight = 94;
+							var maxHeight = 94; 
 							document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
-							var f = document.getElementById('cmLivechat_chatMessage');
-							if (f.clientHeight < f.scrollHeight && f.scrollHeight < maxHeight )
+							var f = document.getElementById('cmLivechat_chatMessage'); 
+							if (f.clientHeight < f.scrollHeight && f.scrollHeight < maxHeight ) 
 								{ f.style.height = f.scrollHeight + 'px'; }
 							});      */
                             $('#cmLivechat_sendChatMessage').click(function()
@@ -1484,7 +1484,7 @@
 								var formattedDate = '<span style="font-size:0.6em;">'+(new Date().getHours() < 10 ? '0'+new Date().getHours() : new Date().getHours())+":"+(new Date().getMinutes() < 10 ? '0'+new Date().getMinutes() : new Date().getMinutes())+"</span><br>";
 								//document.getElementById('cmLivechat_chatMessage').style.height = '20px';
 								//document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
-
+								
                                 if($('#cmLivechat_chatMessage').val().trim() == "") return;
                                 $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-all;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
 
@@ -1526,29 +1526,29 @@
                     break;
             }
         }
-
+		
 		var currentGroup = groups[0];
-
+		
 		var isDayOff = false;
 		var isWorkTime = false;
 		if(currentGroup.livechatGroupDayTimeSettings)
 		{
 			var currentDate = new Date(new Date().getFullYear(),new Date().getMonth() , new Date().getDate());
 			var currentTime = currentDate.getHours()+':'+currentDate.getMinutes();
-
+			
 			var daysOff = [];
 			//Days off check
 			for(var  i = 0; i < JSON.parse(currentGroup.conditionDayOff).length;i++)
 			{
 				daysOff.push([new Date(JSON.parse(currentGroup.conditionDayOff)[i].startDate),new Date(JSON.parse(currentGroup.conditionDayOff)[i].endDate)]);
 			}
-
+			
 			for(var j = 0;j < daysOff.length;j++)
 			{
 					if(daysOff[j][0].getTime()  <= currentDate.getTime() && daysOff[j][1].getTime() >= currentDate.getTime())
 						isDayOff = true;
 			}
-
+			
 			currentDate = new Date();
 			currentTime = currentDate.getHours()*60+currentDate.getMinutes();
 			console.log(isDayOff);
@@ -1556,9 +1556,9 @@
 			{
 				var workHours = [];
 				var wH = JSON.parse(currentGroup.conditionWorkhour);
-
+				
 				var currentDay = currentDate.getDay();
-
+				
 				for(var k = 0;k < wH.length;k++)
 				{
 					var startDay = -1;
@@ -1566,7 +1566,7 @@
 					var startHour = -1;
 					var endHour = -1;
 					var currentHour = -1;
-
+					
 					switch(wH[k].startday)
 					{
 						case 'Su':
@@ -1590,7 +1590,7 @@
 						case 'Sa':
 							startDay = 6;
 							break;
-
+							
 					}
 					switch(wH[k].endday)
 					{
@@ -1615,12 +1615,12 @@
 						case 'Sa':
 							endDay = 6;
 							break;
-
+							
 					}
 					startHour = Number(wH[k].starttime.split(':')[0])*60+Number(wH[k].starttime.split(':')[1]);
 					endHour = Number(wH[k].endtime.split(':')[0]*60)+Number(wH[k].endtime.split(':')[1]);
 					currentHour = currentTime;
-
+					
 					console.log("Client:");
 					console.log(currentDay);
 					console.log(currentHour);
@@ -1629,19 +1629,19 @@
 					console.log(startHour);
 					console.log(endDay);
 					console.log(endHour);
-
+					
 					if( (currentDay >= startDay && currentDay <= endDay) && (currentHour >= startHour && currentHour <= endHour))
 						isWorkTime = true;
-
-
+					
+					
 				}
 				console.log(isWorkTime);
 				if(isWorkTime)
 					isDayOff = false;
 				else
 					isDayOff = true;
-
-
+				
+				
 				if(isDayOff)
 				{
 					$('#cmLivechat_icDropper').css('display','none');
@@ -1656,7 +1656,7 @@
 					doGreetings();
 				},templateOptions.livechat.initialGreetingTimer * 1000);
 				}
-
+				
 			}
 		}
 		else
@@ -1668,20 +1668,20 @@
 			}
 			var currentDate = new Date(new Date().getFullYear(),new Date().getMonth() , new Date().getDate());
 			var currentTime = currentDate.getHours()+':'+currentDate.getMinutes();
-
+			
 			var daysOff = [];
 			//Days off check
 			for(var  i = 0; i < JSON.parse(currentGroup.conditionDayOff).length;i++)
 			{
 				daysOff.push([new Date(JSON.parse(currentGroup.conditionDayOff)[i].startDate),new Date(JSON.parse(currentGroup.conditionDayOff)[i].endDate)]);
 			}
-
+			
 			for(var j = 0;j < daysOff.length;j++)
 			{
 					if(daysOff[j][0].getTime()  <= currentDate.getTime() && daysOff[j][1].getTime() >= currentDate.getTime())
 						isDayOff = true;
 			}
-
+			
 			currentDate = new Date();
 			currentTime = currentDate.getHours()*60+currentDate.getMinutes();
 			console.log(isDayOff);
@@ -1689,9 +1689,9 @@
 			{
 				var workHours = [];
 				var wH = JSON.parse(currentGroup.conditionWorkhour);
-
+				
 				var currentDay = currentDate.getDay();
-
+				
 				for(var k = 0;k < wH.length;k++)
 				{
 					var startDay = -1;
@@ -1699,7 +1699,7 @@
 					var startHour = -1;
 					var endHour = -1;
 					var currentHour = -1;
-
+					
 					switch(wH[k].startday)
 					{
 						case 'Su':
@@ -1723,7 +1723,7 @@
 						case 'Sa':
 							startDay = 6;
 							break;
-
+							
 					}
 					switch(wH[k].endday)
 					{
@@ -1748,12 +1748,12 @@
 						case 'Sa':
 							endDay = 6;
 							break;
-
+							
 					}
 					startHour = Number(wH[k].starttime.split(':')[0])*60+Number(wH[k].starttime.split(':')[1]);
 					endHour = Number(wH[k].endtime.split(':')[0]*60)+Number(wH[k].endtime.split(':')[1]);
 					currentHour = currentTime;
-
+					
 					console.log("Client:");
 					console.log(currentDay);
 					console.log(currentHour);
@@ -1762,19 +1762,19 @@
 					console.log(startHour);
 					console.log(endDay);
 					console.log(endHour);
-
+					
 					if( (currentDay >= startDay && currentDay <= endDay) && (currentHour >= startHour && currentHour <= endHour))
 						isWorkTime = true;
-
-
+					
+					
 				}
 				console.log(isWorkTime);
 				if(isWorkTime)
 					isDayOff = false;
 				else
 					isDayOff = true;
-
-
+				
+				
 				if(isDayOff)
 				{
 					$('#cmLivechat_icDropper').css('display','none');
@@ -1789,45 +1789,45 @@
 					doGreetings();
 				},templateOptions.livechat.initialGreetingTimer * 1000);
 				}
-
+				
 			}
 		}
 
-
+		
 		$('[data-type="group_dd"]').on('change', function() {
 			var currentGroup = null;
-
-
+			
+			
 			var selectedGroup = $(this).val();
-
+			
 			$('[data-type="group_dd"]').val(selectedGroup);
-
+			
 			for(var zy = 0;zy < groups.length;zy++)
 			{
 				if(groups[zy]._id.toString() == selectedGroup.toString())
 					currentGroup = groups[zy];
 			}
-
+		
 		var isDayOff = false;
 		var isWorkTime = false;
 		if(currentGroup.livechatGroupDayTimeSettings)
 		{
 			var currentDate = new Date(new Date().getFullYear(),new Date().getMonth() , new Date().getDate());
 			var currentTime = currentDate.getHours()+':'+currentDate.getMinutes();
-
+			
 			var daysOff = [];
 			//Days off check
 			for(var  i = 0; i < JSON.parse(currentGroup.conditionDayOff).length;i++)
 			{
 				daysOff.push([new Date(JSON.parse(currentGroup.conditionDayOff)[i].startDate),new Date(JSON.parse(currentGroup.conditionDayOff)[i].endDate)]);
 			}
-
+			
 			for(var j = 0;j < daysOff.length;j++)
 			{
 					if(daysOff[j][0].getTime()  <= currentDate.getTime() && daysOff[j][1].getTime() >= currentDate.getTime())
 						isDayOff = true;
 			}
-
+			
 			currentDate = new Date();
 			currentTime = currentDate.getHours()*60+currentDate.getMinutes();
 			console.log(isDayOff);
@@ -1835,9 +1835,9 @@
 			{
 				var workHours = [];
 				var wH = JSON.parse(currentGroup.conditionWorkhour);
-
+				
 				var currentDay = currentDate.getDay();
-
+				
 				for(var k = 0;k < wH.length;k++)
 				{
 					var startDay = -1;
@@ -1845,7 +1845,7 @@
 					var startHour = -1;
 					var endHour = -1;
 					var currentHour = -1;
-
+					
 					switch(wH[k].startday)
 					{
 						case 'Su':
@@ -1869,7 +1869,7 @@
 						case 'Sa':
 							startDay = 6;
 							break;
-
+							
 					}
 					switch(wH[k].endday)
 					{
@@ -1894,12 +1894,12 @@
 						case 'Sa':
 							endDay = 6;
 							break;
-
+							
 					}
 					startHour = Number(wH[k].starttime.split(':')[0])*60+Number(wH[k].starttime.split(':')[1]);
 					endHour = Number(wH[k].endtime.split(':')[0]*60)+Number(wH[k].endtime.split(':')[1]);
 					currentHour = currentTime;
-
+					
 					console.log("Client:");
 					console.log(currentDay);
 					console.log(currentHour);
@@ -1908,19 +1908,19 @@
 					console.log(startHour);
 					console.log(endDay);
 					console.log(endHour);
-
+					
 					if( (currentDay >= startDay && currentDay <= endDay) && (currentHour >= startHour && currentHour <= endHour))
 						isWorkTime = true;
-
-
+					
+					
 				}
 				console.log(isWorkTime);
 				if(isWorkTime)
 					isDayOff = false;
 				else
 					isDayOff = true;
-
-
+				
+				
 				if(isDayOff)
 				{
 					$('#cmLivechat_icDropper').css('display','none');
@@ -1935,7 +1935,7 @@
 					doGreetings();
 				},templateOptions.livechat.initialGreetingTimer * 1000);
 				}
-
+				
 			}
 		}
 		else
@@ -1947,20 +1947,20 @@
 			}
 			var currentDate = new Date(new Date().getFullYear(),new Date().getMonth() , new Date().getDate());
 			var currentTime = currentDate.getHours()+':'+currentDate.getMinutes();
-
+			
 			var daysOff = [];
 			//Days off check
 			for(var  i = 0; i < JSON.parse(currentGroup.conditionDayOff).length;i++)
 			{
 				daysOff.push([new Date(JSON.parse(currentGroup.conditionDayOff)[i].startDate),new Date(JSON.parse(currentGroup.conditionDayOff)[i].endDate)]);
 			}
-
+			
 			for(var j = 0;j < daysOff.length;j++)
 			{
 					if(daysOff[j][0].getTime()  <= currentDate.getTime() && daysOff[j][1].getTime() >= currentDate.getTime())
 						isDayOff = true;
 			}
-
+			
 			currentDate = new Date();
 			currentTime = currentDate.getHours()*60+currentDate.getMinutes();
 			console.log(isDayOff);
@@ -1968,9 +1968,9 @@
 			{
 				var workHours = [];
 				var wH = JSON.parse(currentGroup.conditionWorkhour);
-
+				
 				var currentDay = currentDate.getDay();
-
+				
 				for(var k = 0;k < wH.length;k++)
 				{
 					var startDay = -1;
@@ -1978,7 +1978,7 @@
 					var startHour = -1;
 					var endHour = -1;
 					var currentHour = -1;
-
+					
 					switch(wH[k].startday)
 					{
 						case 'Su':
@@ -2002,7 +2002,7 @@
 						case 'Sa':
 							startDay = 6;
 							break;
-
+							
 					}
 					switch(wH[k].endday)
 					{
@@ -2027,12 +2027,12 @@
 						case 'Sa':
 							endDay = 6;
 							break;
-
+							
 					}
 					startHour = Number(wH[k].starttime.split(':')[0])*60+Number(wH[k].starttime.split(':')[1]);
 					endHour = Number(wH[k].endtime.split(':')[0]*60)+Number(wH[k].endtime.split(':')[1]);
 					currentHour = currentTime;
-
+					
 					console.log("Client:");
 					console.log(currentDay);
 					console.log(currentHour);
@@ -2041,19 +2041,19 @@
 					console.log(startHour);
 					console.log(endDay);
 					console.log(endHour);
-
+					
 					if( (currentDay >= startDay && currentDay <= endDay) && (currentHour >= startHour && currentHour <= endHour))
 						isWorkTime = true;
-
-
+					
+					
 				}
 				console.log(isWorkTime);
 				if(isWorkTime)
 					isDayOff = false;
 				else
 					isDayOff = true;
-
-
+				
+				
 				if(isDayOff)
 				{
 					$('#cmLivechat_icDropper').css('display','none');
@@ -2068,10 +2068,10 @@
 					doGreetings();
 				},templateOptions.livechat.initialGreetingTimer * 1000);
 				}
-
+				
 			}
 		}
-
+			
 		});
 
         $('#cmLivechat_windowMinimize').click(function()
@@ -2109,6 +2109,8 @@
         return window.getComputedStyle(element, null).getPropertyValue(property);
     }
 
-    $(document).cmLivechat();
+    
+
+
 
 }( jQuery ));
