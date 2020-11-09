@@ -1,4 +1,5 @@
-
+setTimeout(function()
+{
 (function ( $ ) {
     var templateOptions = null;
 	
@@ -2114,3 +2115,6 @@
 
 
 }( jQuery ));
+
+$(document).cmLivechat();
+},2000);
