@@ -463,7 +463,7 @@ setTimeout(function()
     }
 	function doGreetings()
 	{
-		if(window.cmLivechatIsOpen == false)
+		if(window.cmLivechatIsOpen == false && checkCookie('cmLivechat_chatID') == false)
             {
                 $('#cmLivechat_iconClosed').css('display','initial');
                 $('#cmLivechat_iconOpen').css('display','none');
