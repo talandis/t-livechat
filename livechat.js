@@ -7,9 +7,9 @@ setTimeout(function()
 
         var settings = $.extend({
             
-            template: 'v42SQ23zz3r3zWC',
-			siteUrl: 'https://cm.voipshop.lt',
-            socketUrl: 'https://cm.voipshop.lt',
+            template: 'G0kO1c9QB5xquPp',
+			siteUrl: 'https://cmtest.voipshop.lt',
+            socketUrl: 'https://cmtest.voipshop.lt',
 			v4FontAwesome: true,
 			v4OlderFontAwesome: false
         }, options );
@@ -251,7 +251,10 @@ setTimeout(function()
                         $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
                     }
                 }
-            window.cmLivechat_socket = io(window.cmLivechat_socketUrl);
+            window.cmLivechat_socket = io(window.cmLivechat_socketUrl, {
+                // WARNING: in that case, there is no fallback to long-polling
+                transports: [ 'websocket' ] // or [ 'websocket', 'polling' ], which is the same thing
+            });
             window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
             window.cmLivechat_socket.on('cmLivechat_message', function(data){
                 console.log(data);
@@ -935,7 +938,10 @@ setTimeout(function()
                             dataToSend.to = window.cmLivechat_groups[0]._id;
 						 setCookie('cmLivechat_chatID',ts);
                         dataToSend.initialData = JSON.stringify(dataToSend.initialData);
-                        window.cmLivechat_socket = io(window.cmLivechat_socketUrl);
+                        window.cmLivechat_socket = io(window.cmLivechat_socketUrl, {
+                            // WARNING: in that case, there is no fallback to long-polling
+                            transports: [ 'websocket' ] // or [ 'websocket', 'polling' ], which is the same thing
+                        });
                         window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
                         window.cmLivechat_socket.on('cmLivechat_message', function(data){
                             console.log(data);
@@ -1433,7 +1439,10 @@ setTimeout(function()
                             dataToSend.to = window.cmLivechat_groups[0]._id;
 						 setCookie('cmLivechat_chatID',ts);
                         dataToSend.initialData = JSON.stringify(dataToSend.initialData);
-                        window.cmLivechat_socket = io(window.cmLivechat_socketUrl);
+                        window.cmLivechat_socket = io(window.cmLivechat_socketUrl, {
+                            // WARNING: in that case, there is no fallback to long-polling
+                            transports: [ 'websocket' ] // or [ 'websocket', 'polling' ], which is the same thing
+                        });
                         window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
                         window.cmLivechat_socket.on('cmLivechat_message', function(data){
                             console.log(data);
