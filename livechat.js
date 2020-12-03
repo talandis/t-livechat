@@ -7,9 +7,9 @@ setTimeout(function()
 
         var settings = $.extend({
             
-            template: 'G0kO1c9QB5xquPp',
-			siteUrl: 'https://cmtest.voipshop.lt',
-            socketUrl: 'https://cmtest.voipshop.lt',
+            template: 'v42SQ23zz3r3zWC',
+			siteUrl: 'https://cm.voipshop.lt',
+            socketUrl: 'https://cm.voipshop.lt',
 			v4FontAwesome: true,
 			v4OlderFontAwesome: false
         }, options );
