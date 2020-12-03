@@ -10,7 +10,8 @@ setTimeout(function()
             template: 'G0kO1c9QB5xquPp',
 			siteUrl: 'https://cmtest.voipshop.lt',
             socketUrl: 'https://cmtest.voipshop.lt',
-			v4FontAwesome: true
+			v4FontAwesome: true,
+			v4OlderFontAwesome: false
         }, options );
 
         $.getJSON( settings.siteUrl+'/livechat/template/'+settings.template, function( data ) {
@@ -181,7 +182,7 @@ setTimeout(function()
             $('#cmLivechat_header').append("<img style='max-width:229px;height:40px;margin:5px;float:left;' src='data: "+JSON.parse(templateOptions.livechat.logo).contentType+";base64,"+templateOptions.logo+"'>");
 
         }
-        $('#cmLivechat_header').append("<span  id='cmLivechat_windowClose'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+"fa-window-close' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
+        $('#cmLivechat_header').append("<span  id='cmLivechat_windowClose'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+(settingsOptions.v4OlderFontAwesome?"fa-times":"fa-window-close")+"' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
         $('#cmLivechat_header').append("<span id='cmLivechat_windowMinimize'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+"fa-minus-square' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
         $('#cmLivechat_header').append("<span id='cmLivechat_soundOn'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+" fa-bell' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
         $('#cmLivechat_header').append("<span id='cmLivechat_soundOff' style='display:none;'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+" fa-bell-slash' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
@@ -231,7 +232,7 @@ setTimeout(function()
         $('#cmLivechat_icDropper').append('<textarea rows="5" id="cmLivechat_chatMessage" type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:97% !important;position:absolute;bottom:22px;resize: none;margin-left:0px;height:90px;" ></textarea>');
 		$('#cmLivechat_icDropper').append('<button id="cmLivechat_sendChatMessage" type="button" style="'+cssBtn+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:auto;height:34px;position:absolute;background-color:transparent;padding:0;margin:0;bottom:0px;font-size:23px;right:0px;text-transform:none;"><i class="'+(settingsOptions.v4FontAwesome ? "fa fa-paper-plane" : "fab fa-telegram-plane")+'"></i></button>');
 		
-        $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;word-wrap:break-word'></div>");
+        $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;overflow-wrap:break-word'></div>");
 
         $.getJSON(window.cmLivechat_siteUrl+'/livechat/chathistory/'+getCookie('cmLivechat_chatID'), function( data ) {
             console.log(data);
@@ -241,13 +242,13 @@ setTimeout(function()
 					var formattedDate = '<span style="font-size:0.6em;">'+messages[z].name+' '+(new Date(messages[z].date).getHours() < 10 ? '0'+new Date(messages[z].date).getHours() : new Date(messages[z].date).getHours())+":"+(new Date(messages[z].date).getMinutes() < 10 ? '0'+new Date(messages[z].date).getMinutes() : new Date(messages[z].date).getMinutes())+"</span><br>";
                     if(messages[z].type == 'INCOMING' && messages[z].text != undefined)
                     {
-                        $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-all;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
+                        $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break:break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
 
                     }
                     else
                     {
                         if(messages[z].text != undefined)
-                        $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-all;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
+                        $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
                     }
                 }
             window.cmLivechat_socket = io(window.cmLivechat_socketUrl);
@@ -255,7 +256,7 @@ setTimeout(function()
             window.cmLivechat_socket.on('cmLivechat_message', function(data){
                 console.log(data);
 				var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
-                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-all;">'+formattedDate+data.text+'</span><br style="clear:both;">');
+                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
                 var elem = document.getElementById('cmLivechat_chat');
                 elem.scrollTop = elem.scrollHeight;
 				window.cmLivechatIsOpen = true;
@@ -301,7 +302,7 @@ setTimeout(function()
 				//document.getElementById('cmLivechat_chatMessage').style.height = '20px';
 				//document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
                 if($('#cmLivechat_chatMessage').val().trim() == "") return;
-                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-all;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
+                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
 
                 var dataToSend = {};
                 var ts = Math.round((new Date()).getTime() / 1000).toString()+
@@ -351,7 +352,7 @@ setTimeout(function()
     function renderPopupButton()
     {
 
-        var windowDiv = "<div class='text-center' id='cmLivechat_popupButton' style='color: "+(templateOptions.livechat ? templateOptions.livechat.mfcColor : '#ccc') +';background-color:'+(templateOptions.livechat ?  templateOptions.livechat.bgColor :'#133a61')+";width:60px;height:60px;border-radius:50%;position: fixed;bottom:12.5%;right:3%;z-index:10000;'></div>";
+        var windowDiv = "<div class='text-center' id='cmLivechat_popupButton' style='color: "+(templateOptions.livechat ? templateOptions.livechat.mfcColor : '#ccc') +';background-color:'+(templateOptions.livechat ?  templateOptions.livechat.bgColor :'#133a61')+";width:60px;height:60px;border-radius:50%;position: fixed;bottom:12.5%;right:3%;z-index:2147483648;'></div>";
         $('body').append(windowDiv);
 		if(settingsOptions.v4FontAwesome)
 		{	
@@ -422,6 +423,13 @@ setTimeout(function()
 			$('#cmLivechat_iconOpen > i').css('margin-left','0px');
 			$('#cmLivechat_iconOpen > i').css('margin-top','16px');
 		}
+		if(settingsOptions.v4OlderFontAwesome)
+        {
+            $('#cmLivechat_iconClosed > i').css('font-size','26px');
+            $('#cmLivechat_iconOpen > i').css('font-size','26px');
+            $('#cmLivechat_iconOpen > i').css('z-index','2147483648');
+            $('#cmLivechat_iconClosed > i').css('z-index','2147483648');
+        }
 		
 		
 		},100);
@@ -493,7 +501,7 @@ setTimeout(function()
                 $('#cmLivechat_header').append("<img style='max-width:229px;height:40px;margin:5px;float:left;' src='data: "+JSON.parse(templateOptions.livechat.logo).contentType+";base64,"+templateOptions.logo+"'>");
 
             }
-            $('#cmLivechat_header').append("<span  id='cmLivechat_windowClose'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+" fa-window-close' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
+            $('#cmLivechat_header').append("<span  id='cmLivechat_windowClose'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+(settingsOptions.v4OlderFontAwesome?"fa-times":"fa-window-close")+"' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
             $('#cmLivechat_header').append("<span id='cmLivechat_windowMinimize'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+" fa-minus-square' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
             $('#cmLivechat_header').append("<span id='cmLivechat_soundOn'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+" fa-bell' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
             $('#cmLivechat_header').append("<span id='cmLivechat_soundOff' style='display:none;'><i class='"+(settingsOptions.v4FontAwesome ? "fa " : "fas ")+" fa-bell-slash' style='float:right;color:"+templateOptions.livechat.mfcColor+";padding:5px;' ></i></span>");
@@ -932,7 +940,7 @@ setTimeout(function()
                         window.cmLivechat_socket.on('cmLivechat_message', function(data){
                             console.log(data);
 								var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
-                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-all;">'+formattedDate+data.text+'</span><br style="clear:both;">');
+                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
                             var elem = document.getElementById('cmLivechat_chat');
                             elem.scrollTop = elem.scrollHeight;
 							
@@ -991,7 +999,7 @@ setTimeout(function()
 								//document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
 								
                                 if($('#cmLivechat_chatMessage').val().trim() == "") return;
-                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-all;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
+                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
 
                                 var dataToSend = {};
                                 var ts = Math.round((new Date()).getTime() / 1000).toString()+
@@ -1430,7 +1438,7 @@ setTimeout(function()
                         window.cmLivechat_socket.on('cmLivechat_message', function(data){
                             console.log(data);
 								var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
-                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-all;">'+formattedDate+data.text+'</span><br style="clear:both;">');
+                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
                             var elem = document.getElementById('cmLivechat_chat');
                             elem.scrollTop = elem.scrollHeight;
 							
@@ -1487,7 +1495,7 @@ setTimeout(function()
 								//document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
 								
                                 if($('#cmLivechat_chatMessage').val().trim() == "") return;
-                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-all;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
+                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
 
                                 var dataToSend = {};
                                 var ts = Math.round((new Date()).getTime() / 1000).toString()+
@@ -1652,10 +1660,20 @@ setTimeout(function()
 				{
 					$('#cmLivechat_icDropper').css('display','block');
 					$('#cmLivechat_icDropperNWH').css('display','none');
+					if(templateOptions.livechat.initialGreetingRepeating)
+                    {
 					setInterval(function()
 				{
 					doGreetings();
 				},templateOptions.livechat.initialGreetingTimer * 1000);
+                    }
+                    else
+                    {
+                        setTimeout(function()
+                        {
+                            doGreetings();
+                        },templateOptions.livechat.initialGreetingTimer * 1000);
+                    }
 				}
 				
 			}
@@ -1785,10 +1803,20 @@ setTimeout(function()
 				{
 					$('#cmLivechat_icDropper').css('display','block');
 					$('#cmLivechat_icDropperNWH').css('display','none');
-					setInterval(function()
-				{
-					doGreetings();
-				},templateOptions.livechat.initialGreetingTimer * 1000);
+                    if(templateOptions.livechat.initialGreetingRepeating)
+                    {
+                        setInterval(function()
+                        {
+                            doGreetings();
+                        },templateOptions.livechat.initialGreetingTimer * 1000);
+                    }
+                    else
+                    {
+                        setTimeout(function()
+                        {
+                            doGreetings();
+                        },templateOptions.livechat.initialGreetingTimer * 1000);
+                    }
 				}
 				
 			}
@@ -1931,10 +1959,20 @@ setTimeout(function()
 				{
 					$('#cmLivechat_icDropper').css('display','block');
 					$('#cmLivechat_icDropperNWH').css('display','none');
-					setInterval(function()
-				{
-					doGreetings();
-				},templateOptions.livechat.initialGreetingTimer * 1000);
+                    if(templateOptions.livechat.initialGreetingRepeating)
+                    {
+                        setInterval(function()
+                        {
+                            doGreetings();
+                        },templateOptions.livechat.initialGreetingTimer * 1000);
+                    }
+                    else
+                    {
+                        setTimeout(function()
+                        {
+                            doGreetings();
+                        },templateOptions.livechat.initialGreetingTimer * 1000);
+                    }
 				}
 				
 			}
@@ -2064,10 +2102,20 @@ setTimeout(function()
 				{
 					$('#cmLivechat_icDropper').css('display','block');
 					$('#cmLivechat_icDropperNWH').css('display','none');
-					setInterval(function()
-				{
-					doGreetings();
-				},templateOptions.livechat.initialGreetingTimer * 1000);
+                    if(templateOptions.livechat.initialGreetingRepeating)
+                    {
+                        setInterval(function()
+                        {
+                            doGreetings();
+                        },templateOptions.livechat.initialGreetingTimer * 1000);
+                    }
+                    else
+                    {
+                        setTimeout(function()
+                        {
+                            doGreetings();
+                        },templateOptions.livechat.initialGreetingTimer * 1000);
+                    }
 				}
 				
 			}
