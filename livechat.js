@@ -44,6 +44,7 @@ setTimeout(function()
 			document.body.removeChild(span);
 			setTimeout(function()
 			{
+
             if(checkCookie('cmLivechat_chatID'))
 			{
                 
@@ -57,6 +58,7 @@ setTimeout(function()
 				
             }
 			renderPopupButton();
+            $(window).resize();
 			},2000);
 
 
@@ -97,7 +99,7 @@ setTimeout(function()
 	$(window).on('resize', function(){
       var win = $(this); //this = window
       
-      if (win.width() < 600) {
+      if (win.width() < 649) {
 
 		  $('#cmLivechat_container').css('width','100%');
 		  $('#cmLivechat_container').css('height','100%');
@@ -113,7 +115,7 @@ setTimeout(function()
 		  $('#cmLivechat_icDropperNWH').css('height','70%');
 		  
 		  $('#cmLivechat_chat').css('width','auto');		  
-		  $('#cmLivechat_chat').css('height','70%');		  
+		  $('#cmLivechat_chat').css('height','50%');
 		  
 		  $('#cmLivechat_chatMessage').css('width','97% !important');
 		  //$('#cmLivechat_chatMessage').css('height','20px');
@@ -229,7 +231,7 @@ setTimeout(function()
         });
 
         $('#cmLivechat_icDropper').empty();
-        $('#cmLivechat_icDropper').append('<textarea rows="5" id="cmLivechat_chatMessage" type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:97% !important;position:absolute;bottom:22px;resize: none;margin-left:0px;height:90px;" ></textarea>');
+        $('#cmLivechat_icDropper').append('<textarea rows="5" id="cmLivechat_chatMessage" type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:97% !important;position:absolute;bottom:22px;resize: none;margin-left:0px;height:90px;z-index:30000;" ></textarea>');
 		$('#cmLivechat_icDropper').append('<button id="cmLivechat_sendChatMessage" type="button" style="'+cssBtn+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:auto;height:34px;position:absolute;background-color:transparent;padding:0;margin:0;bottom:0px;font-size:23px;right:0px;text-transform:none;"><i class="'+(settingsOptions.v4FontAwesome ? "fa fa-paper-plane" : "fab fa-telegram-plane")+'"></i></button>');
 		
         $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;overflow-wrap:break-word'></div>");
@@ -962,7 +964,7 @@ setTimeout(function()
 						$('#cmLivechat_icDropperNWH').css('display','none');
 						$('#cmLivechat_icDropper').css('display','block');
                        $('#cmLivechat_icDropper').empty();
-                       $('#cmLivechat_icDropper').append('<textarea rows="5" id="cmLivechat_chatMessage" type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:97% !important;position:absolute;bottom:22px;resize: none;margin-left:0px;height:90px;" ></textarea>');
+                       $('#cmLivechat_icDropper').append('<textarea rows="5" id="cmLivechat_chatMessage" type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:97% !important;position:absolute;bottom:22px;resize: none;margin-left:0px;height:90px;z-index:30000;" ></textarea>');
 					   $('#cmLivechat_icDropper').append('<button id="cmLivechat_sendChatMessage" type="button" style="'+cssBtn+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:auto;height:34px;padding:0;background-color:transparent;position:absolute;bottom:0px;margin:0;right:0px;font-size:23px;text-transform:none;"><i class="'+(settingsOptions.v4FontAwesome ? "fa fa-paper-plane" : "fab fa-telegram-plane")+' "></i></button>');
                             $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;'></div>");
                             var input = document.getElementById("cmLivechat_chatMessage");
@@ -1458,7 +1460,7 @@ setTimeout(function()
                        console.log("POSTED");
 
                        $('#cmLivechat_icDropper').empty();
-                       $('#cmLivechat_icDropper').append('<textarea rows="5" id="cmLivechat_chatMessage" type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:97% !important;position:absolute;bottom:22px;resize: none;margin-left:0px;height:90px;" ></textarea>');
+                       $('#cmLivechat_icDropper').append('<textarea rows="5" id="cmLivechat_chatMessage" type="text" style="'+cssFormControl+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:97% !important;position:absolute;bottom:22px;resize: none;margin-left:0px;height:90px;z-index:30000;" ></textarea>');
                        $('#cmLivechat_icDropper').append('<button id="cmLivechat_sendChatMessage" type="button" style="'+cssBtn+' margin-top:5px;margin-bottom:5px;color:' + templateOptions.livechat.fcColor + ';width:auto;height:34px;padding:0;background-color:transparent;position:absolute;bottom:0px;margin:0;right:0px;font-size:23px;text-transform:none;"><i class="'+(settingsOptions.v4FontAwesome ? "fa fa-paper-plane" : "fab  fa-telegram-plane")+'"></i></button>');
                             $('#cmLivechat_icDropper').append("<div id='cmLivechat_chat' style='background-color: " + templateOptions.livechat.fgColor + ";width:300px;height:280px;overflow:auto;padding-left:5px;padding-right:5px;position:relative;'></div>");
                             var input = document.getElementById("cmLivechat_chatMessage");
