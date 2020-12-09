@@ -174,8 +174,8 @@ setTimeout(function()
     {
 		
 		
-        var cssBtn = 'display: inline-block;margin-bottom: 0;margin-top:0;margin-left:0.3em;margin-right:0.3em;font-weight: 400;text-align: center;vertical-align: middle;touch-action: manipulation;cursor: pointer;background-image: none;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 0.7em;line-height: 1.42857143;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
-        var cssFormControl = 'display: block; width: 90%;height: 20px; padding: 6px 12px;font-size: 0.7em;line-height: 1.42857143;background-color: #fff;background-image: none;border: 1px solid #ccc; border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075); box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;min-height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
+        var cssBtn = 'display: inline-block;margin-bottom: 0;margin-top:0;margin-left:0.3em;margin-right:0.3em;font-weight: 400;text-align: center;vertical-align: middle;touch-action: manipulation;cursor: pointer;background-image: none;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 0.8em;line-height: 1.42857143;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
+        var cssFormControl = 'display: block; width: 90%;height: 20px; padding: 6px 12px;font-size: 0.8em;line-height: 1.42857143;background-color: #fff;background-image: none;border: 1px solid #ccc; border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075); box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;min-height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
         $('body').append("<div id='cmLivechat_container' style='width:300px;height:400px;position:fixed;bottom:35%;right:4%;display:none;box-sizing:initial;font-size:initial;border-radius:200px;z-index:10000;'></div>");
         $('#cmLivechat_container').append("<div id='cmLivechat_header' style='background-color: " + templateOptions.livechat.bgColor + ";width:300px;height:50px;border-top-left-radius:10px;border-top-right-radius:10px;'></div>");
 
@@ -244,13 +244,13 @@ setTimeout(function()
 					var formattedDate = '<span style="font-size:0.6em;">'+messages[z].name+' '+(new Date(messages[z].date).getHours() < 10 ? '0'+new Date(messages[z].date).getHours() : new Date(messages[z].date).getHours())+":"+(new Date(messages[z].date).getMinutes() < 10 ? '0'+new Date(messages[z].date).getMinutes() : new Date(messages[z].date).getMinutes())+"</span><br>";
                     if(messages[z].type == 'INCOMING' && messages[z].text != undefined)
                     {
-                        $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break:break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
+                        $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break:break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
 
                     }
                     else
                     {
                         if(messages[z].text != undefined)
-                        $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
+                        $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
                     }
                 }
             window.cmLivechat_socket = io(window.cmLivechat_socketUrl);
@@ -258,7 +258,7 @@ setTimeout(function()
             window.cmLivechat_socket.on('cmLivechat_message', function(data){
                 console.log(data);
 				var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
-                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
+                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
                 var elem = document.getElementById('cmLivechat_chat');
                 elem.scrollTop = elem.scrollHeight;
 				window.cmLivechatIsOpen = true;
@@ -304,7 +304,7 @@ setTimeout(function()
 				//document.getElementById('cmLivechat_chatMessage').style.height = '20px';
 				//document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
                 if($('#cmLivechat_chatMessage').val().trim() == "") return;
-                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
+                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
 
                 var dataToSend = {};
                 var ts = Math.round((new Date()).getTime() / 1000).toString()+
@@ -493,8 +493,8 @@ setTimeout(function()
     {
 		
 
-        var cssBtn = 'display: inline-block;margin-bottom: 0;margin-top:0;margin-left:0.3em;margin-right:0.3em;font-weight: 400;text-align: center;vertical-align: middle;touch-action: manipulation;cursor: pointer;background-image: none;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 0.7em;line-height: 1.42857143;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
-        var cssFormControl = 'display: inline-block; width: 85%;height: 20px; padding: 6px 12px;font-size: 0.7em;line-height: 1.42857143;background-color: #fff;background-image: none;border: 1px solid #ccc; border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075); box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;min-height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;margin-left:10px;';
+        var cssBtn = 'display: inline-block;margin-bottom: 0;margin-top:0;margin-left:0.3em;margin-right:0.3em;font-weight: 400;text-align: center;vertical-align: middle;touch-action: manipulation;cursor: pointer;background-image: none;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 0.8em;line-height: 1.42857143;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
+        var cssFormControl = 'display: inline-block; width: 85%;height: 20px; padding: 6px 12px;font-size: 0.8em;line-height: 1.42857143;background-color: #fff;background-image: none;border: 1px solid #ccc; border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075); box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;min-height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;margin-left:10px;';
             $('body').append("<div id='cmLivechat_container' style='width:300px;height:400px;position:fixed;bottom:35%;right:4%;display:none;box-sizing:initial;font-size:initial;border-radius:200px;z-index:10000;'></div>");
             $('#cmLivechat_container').append("<div id='cmLivechat_header' style='background-color: " + templateOptions.livechat.bgColor + ";width:300px;height:50px;border-top-left-radius:10px;border-top-right-radius:10px;'></div>");
 
@@ -942,7 +942,7 @@ setTimeout(function()
                         window.cmLivechat_socket.on('cmLivechat_message', function(data){
                             console.log(data);
 								var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
-                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
+                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
                             var elem = document.getElementById('cmLivechat_chat');
                             elem.scrollTop = elem.scrollHeight;
 							
@@ -1001,7 +1001,7 @@ setTimeout(function()
 								//document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
 								
                                 if($('#cmLivechat_chatMessage').val().trim() == "") return;
-                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
+                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
 
                                 var dataToSend = {};
                                 var ts = Math.round((new Date()).getTime() / 1000).toString()+
@@ -1440,7 +1440,7 @@ setTimeout(function()
                         window.cmLivechat_socket.on('cmLivechat_message', function(data){
                             console.log(data);
 								var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
-                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
+                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
                             var elem = document.getElementById('cmLivechat_chat');
                             elem.scrollTop = elem.scrollHeight;
 							
@@ -1497,7 +1497,7 @@ setTimeout(function()
 								//document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
 								
                                 if($('#cmLivechat_chatMessage').val().trim() == "") return;
-                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.7em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
+                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
 
                                 var dataToSend = {};
                                 var ts = Math.round((new Date()).getTime() / 1000).toString()+
