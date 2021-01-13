@@ -128,8 +128,8 @@ setTimeout(function()
                 $('#cmLivechat_footer').css('height','45px');
                 $('#cmLivechat_footer').css('padding','10px');
 
-                $('#cmLivechat_container').css('z-index','10000');
-                $('#cmLivechat_popupButton').css('z-index','9999');
+                $('#cmLivechat_container').css('z-index','9999');
+                $('#cmLivechat_popupButton').css('z-index','100000');
                 $('#cmLivechat_igDropper').css('width','auto');
 
 
