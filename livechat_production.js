@@ -132,6 +132,11 @@ setTimeout(function()
                 $('#cmLivechat_popupButton').css('z-index','100000');
                 $('#cmLivechat_igDropper').css('width','auto');
 
+                $('#cmLivechat_windowClose > i').addClass('fa-2x');
+                $('#cmLivechat_windowMinimize > i').addClass('fa-2x');
+                $('#cmLivechat_soundOn > i').addClass('fa-2x');
+                $('#cmLivechat_soundOff > i').addClass('fa-2x');
+
 
             }
 
@@ -166,6 +171,11 @@ setTimeout(function()
                 $('#cmLivechat_container').css('z-index','10000');
                 $('#cmLivechat_popupButton').css('z-index','10000');
                 $('#cmLivechat_igDropper').css('width','300px');
+
+                $('#cmLivechat_windowClose > i').removeClass('fa-2x');
+                $('#cmLivechat_windowMinimize > i').removeClass('fa-2x');
+                $('#cmLivechat_soundOn > i').removeClass('fa-2x');
+                $('#cmLivechat_soundOff > i').removeClass('fa-2x');
 
 
 
