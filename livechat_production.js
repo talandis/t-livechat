@@ -140,8 +140,8 @@ setTimeout(function()
                 $('#cmLivechat_container').css('width','300px');
                 $('#cmLivechat_container').css('height','400px');
                 $('#cmLivechat_container').css('top','auto');
-                $('#cmLivechat_container').css('bottom','35%');
-                $('#cmLivechat_container').css('right','4%');
+                $('#cmLivechat_container').css('bottom','27%');
+                $('#cmLivechat_container').css('right','7%');
 
                 $('#cmLivechat_header').css('width','300px');
 
@@ -178,7 +178,7 @@ setTimeout(function()
 
             var cssBtn = 'display: inline-block;margin-bottom: 0;margin-top:0;margin-left:0.3em;margin-right:0.3em;font-weight: 400;text-align: center;vertical-align: middle;touch-action: manipulation;cursor: pointer;background-image: none;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 0.8em;line-height: 1.42857143;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
             var cssFormControl = 'display: block; width: 90%;height: 20px; padding: 6px 12px;font-size: 0.8em;line-height: 1.42857143;background-color: #fff;background-image: none;border: 1px solid #ccc; border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075); box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;min-height:34px;text-transform:none;text-decoration:none;box-sizing: border-box;font-family: Arial, Helvetica, sans-serif;';
-            $('body').append("<div id='cmLivechat_container' style='width:300px;height:400px;position:fixed;bottom:35%;right:4%;display:none;box-sizing:initial;font-size:initial;border-radius:200px;z-index:10000;'></div>");
+            $('body').append("<div id='cmLivechat_container' style='width:300px;height:400px;position:fixed;bottom:27%;right:7%;display:none;box-sizing:initial;font-size:initial;border-radius:200px;z-index:10000;'></div>");
             $('#cmLivechat_container').append("<div id='cmLivechat_header' style='background-color: " + templateOptions.livechat.bgColor + ";width:300px;height:50px;border-top-left-radius:10px;border-top-right-radius:10px;'></div>");
 
             if(templateOptions.logo != null)
@@ -463,7 +463,7 @@ setTimeout(function()
                         $('#cmLivechat_icDropper').css('display','block');
                         $('#cmLivechat_icNWHDropper').css('display','none');
                     }
-                    $('#cmLivechat_container').css('bottom','35%');
+                    $('#cmLivechat_container').css('bottom','27%');
                     $('#cmLivechat_container').css('height','405px');
 
                 }
