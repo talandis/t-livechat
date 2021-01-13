@@ -110,9 +110,9 @@ setTimeout(function()
                 $('#cmLivechat_header').css('width','100%');
 
                 $('#cmLivechat_icDropper').css('width','auto');
-                $('#cmLivechat_icDropper').css('height','85%');
+                $('#cmLivechat_icDropper').css('height','60%');
                 $('#cmLivechat_icDropperNWH').css('width','auto');
-                $('#cmLivechat_icDropperNWH').css('height','85%');
+                $('#cmLivechat_icDropperNWH').css('height','60%');
 
                 $('#cmLivechat_chat').css('width','auto');
                 $('#cmLivechat_chat').css('height','50%');
