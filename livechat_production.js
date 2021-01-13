@@ -356,7 +356,7 @@ setTimeout(function()
         function renderPopupButton()
         {
 
-            var windowDiv = "<div class='text-center' id='cmLivechat_popupButton' style='color: "+(templateOptions.livechat ? templateOptions.livechat.mfcColor : '#ccc') +';background-color:'+(templateOptions.livechat ?  templateOptions.livechat.bgColor :'#133a61')+";width:60px;height:60px;border-radius:50%;position: fixed;bottom:12.5%;right:0.5%;z-index:2147483648;'></div>";
+            var windowDiv = "<div class='text-center' id='cmLivechat_popupButton' style='color: "+(templateOptions.livechat ? templateOptions.livechat.mfcColor : '#ccc') +';background-color:'+(templateOptions.livechat ?  templateOptions.livechat.bgColor :'#133a61')+";width:60px;height:60px;border-radius:50%;position: fixed;bottom:15.5%;right:0.5%;z-index:2147483648;'></div>";
             $('body').append(windowDiv);
             if(settingsOptions.v4FontAwesome)
             {
