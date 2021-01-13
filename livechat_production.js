@@ -483,7 +483,7 @@ setTimeout(function()
                 var objDiv = document.getElementById("cmLivechat_chat");
                 if(objDiv)
                     objDiv.scrollTop = objDiv.scrollHeight;
-                $('#cmLivechat_container').css('bottom','20%');
+                $('#cmLivechat_container').css('bottom','-21%');
                 $('#cmLivechat_container').css('height','200px');
                 $('#cmLivechat_igDropper').css('display','block');
                 $('#cmLivechat_icDropper').css('display','none');
