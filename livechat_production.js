@@ -223,10 +223,11 @@ setTimeout(function()
 
             $('#cmLivechat_windowClose').click(function()
             {
+                window.cmLivechatIsOpen = false;
+
                 $('#cmLivechat_iconClosed').css('display','none');
                 $('#cmLivechat_iconOpen').css('display','initial');
                 $('#cmLivechat_container').css('display','none');
-                window.cmLivechatIsOpen = false;
             });
             $('#cmLivechat_soundOn').click(function()
             {
@@ -475,6 +476,7 @@ setTimeout(function()
                         $('#cmLivechat_icDropper').css('display','block');
                         $('#cmLivechat_icDropperNWH').css('display','none');
                     }
+
                     $('#cmLivechat_container').css('bottom','27%');
                     $('#cmLivechat_container').css('height','405px');
 
@@ -545,7 +547,7 @@ setTimeout(function()
                 $('#cmLivechat_igDropper').css('display','none');
                 $('#cmLivechat_icDropper').css('display','block');
                 $('#cmLivechat_icDropperNWH').css('display','none');
-                $('#cmLivechat_container').css('bottom','35%');
+                $('#cmLivechat_container').css('bottom','27%');
                 $('#cmLivechat_container').css('height','405px');
                 window.cmLivechatIsOpen = true;
             });
@@ -2149,10 +2151,22 @@ setTimeout(function()
 
             $('#cmLivechat_windowClose').click(function()
             {
+                window.cmLivechatIsOpen = false;
+
                 $('#cmLivechat_iconClosed').css('display','none');
                 $('#cmLivechat_iconOpen').css('display','initial');
                 $('#cmLivechat_container').css('display','none');
-                window.cmLivechatIsOpen = false;
+                $('#cmLivechat_igDropper').css('display','none');
+                if($('#cmLivechat_icDropperNWH').css('display') == 'none')
+                {
+                    $('#cmLivechat_icDropper').css('display','block');
+                    $('#cmLivechat_icDropperNWH').css('display','none');
+                }
+
+                $('#cmLivechat_container').css('bottom','27%');
+                $('#cmLivechat_container').css('height','405px');
+
+
             });
             $('#cmLivechat_soundOn').click(function()
             {
