@@ -461,6 +461,8 @@ setTimeout(function()
                     if(objDiv)
                         objDiv.scrollTop = objDiv.scrollHeight;
 
+
+
                 }
                 if(window.cmLivechatIsOpen == false)
                 {
@@ -468,10 +470,10 @@ setTimeout(function()
                     $('#cmLivechat_iconOpen').css('display','initial');
                     $('#cmLivechat_container').css('display','none');
                     $('#cmLivechat_igDropper').css('display','none');
-                    if($('#cmLivechat_icNWHDropper').css('display') == 'none')
+                    if($('#cmLivechat_icDropperNWH').css('display') == 'none')
                     {
                         $('#cmLivechat_icDropper').css('display','block');
-                        $('#cmLivechat_icNWHDropper').css('display','none');
+                        $('#cmLivechat_icDropperNWH').css('display','none');
                     }
                     $('#cmLivechat_container').css('bottom','27%');
                     $('#cmLivechat_container').css('height','405px');
@@ -542,7 +544,7 @@ setTimeout(function()
                     objDiv.scrollTop = objDiv.scrollHeight;
                 $('#cmLivechat_igDropper').css('display','none');
                 $('#cmLivechat_icDropper').css('display','block');
-                $('#cmLivechat_icNWHDropper').css('display','none');
+                $('#cmLivechat_icDropperNWH').css('display','none');
                 $('#cmLivechat_container').css('bottom','35%');
                 $('#cmLivechat_container').css('height','405px');
                 window.cmLivechatIsOpen = true;
