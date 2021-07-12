@@ -37,7 +37,7 @@ setTimeout(function()
                 }
 
                 if(typeof io == 'undefined')
-                    $('head').append("<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js'></script>")
+                    $('head').append("<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js'></script>");
                 if(typeof jQuery == 'undefined')
                     $('head').append("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>");
 
