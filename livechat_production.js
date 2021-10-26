@@ -9,7 +9,7 @@ setTimeout(function()
 
                 template: 'v42SQ23zz3r3zWC',
                 siteUrl: 'https://cm.voipshop.lt',
-                socketUrl: 'https://cm.voipshop.lt',
+                socketUrl: 'wss://ws.voipshop.lt:443/ws',
                 v4FontAwesome: true,
                 v4OlderFontAwesome: false
             }, options );
@@ -36,8 +36,7 @@ setTimeout(function()
 
                 }
 
-                if(typeof io == 'undefined')
-                    $('head').append("<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js'></script>");
+
                 if(typeof jQuery == 'undefined')
                     $('head').append("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>");
 
@@ -266,7 +265,55 @@ setTimeout(function()
                             $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
                     }
                 }
-                window.cmLivechat_socket = io(window.cmLivechat_socketUrl);
+                window.cmLivechat_socket = {};
+                window.cmLivechat_socket.onListeners = [];
+                window.cmLivechat_socket.deferred = [];
+                window.cmLivechat_socket.on = function(msg,callbackFn)
+                {
+                    window.cmLivechat_socket.onListeners.push({msg: msg,callbackFn: callbackFn});
+                    console.log(window.cmLivechat_socket.onListeners);
+                }
+                window.cmLivechat_socket.emit = function(msg,data)
+                {
+                    var formedData =
+                        {
+                            msg: msg,
+                            data: data,
+                            evt: 'emit',
+                            chan: 'uws_server'
+
+                        };
+
+                    if(window.cmLivechat_socket.ws != null && (window.cmLivechat_socket.ws.readyState == 1))
+                        window.cmLivechat_socket.ws.send(JSON.stringify(formedData));
+                    else
+                        window.cmLivechat_socket.deferred.push(JSON.stringify(formedData));
+
+                };
+
+                var websocket = new WebSocket(window.cmLivechat_socketUrl);
+                websocket.onopen = function (event) {
+                    for(var  i = 0;i <  window.cmLivechat_socket.deferred.length;i++)
+                    {
+                        window.cmLivechat_socket.ws.send( window.cmLivechat_socket.deferred[i]);
+                    }
+                    window.cmLivechat_socket.deferred = [];
+                };
+
+                websocket.onmessage = function(event) {
+                    console.log("MESSAGE RECEIVED");
+                    var msg = JSON.parse(event.data);
+                    console.log(msg);
+                    for(var i = 0;i <  window.cmLivechat_socket.onListeners.length;i++)
+                    {
+                        if(window.cmLivechat_socket.onListeners[i].msg == msg.msg)
+                            window.cmLivechat_socket.onListeners[i].callbackFn(msg.data);
+                    }
+                };
+                window.cmLivechat_socket.ws = websocket;
+
+                console.log(window.cmLivechat_socket);
+
                 window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
                 window.cmLivechat_socket.on('cmLivechat_message', function(data){
                     console.log(data);
@@ -953,7 +1000,55 @@ setTimeout(function()
                                 dataToSend.to = window.cmLivechat_groups[0]._id;
                             setCookie('cmLivechat_chatID',ts);
                             dataToSend.initialData = JSON.stringify(dataToSend.initialData);
-                            window.cmLivechat_socket = io(window.cmLivechat_socketUrl);
+                            window.cmLivechat_socket = {};
+                            window.cmLivechat_socket.onListeners = [];
+                            window.cmLivechat_socket.deferred = [];
+                            window.cmLivechat_socket.on = function(msg,callbackFn)
+                            {
+                                window.cmLivechat_socket.onListeners.push({msg: msg,callbackFn: callbackFn});
+                                console.log(window.cmLivechat_socket.onListeners);
+                            }
+                            window.cmLivechat_socket.emit = function(msg,data)
+                            {
+                                var formedData =
+                                    {
+                                        msg: msg,
+                                        data: data,
+                                        evt: 'emit',
+                                        chan: 'uws_server'
+
+                                    };
+
+                                if(window.cmLivechat_socket.ws != null && (window.cmLivechat_socket.ws.readyState == 1))
+                                    window.cmLivechat_socket.ws.send(JSON.stringify(formedData));
+                                else
+                                    window.cmLivechat_socket.deferred.push(JSON.stringify(formedData));
+
+                            };
+
+                            var websocket = new WebSocket(window.cmLivechat_socketUrl);
+                            websocket.onopen = function (event) {
+                                for(var  i = 0;i <  window.cmLivechat_socket.deferred.length;i++)
+                                {
+                                    window.cmLivechat_socket.ws.send( window.cmLivechat_socket.deferred[i]);
+                                }
+                                window.cmLivechat_socket.deferred = [];
+                            };
+
+                            websocket.onmessage = function(event) {
+                                console.log("MESSAGE RECEIVED");
+                                var msg = JSON.parse(event.data);
+                                console.log(msg);
+                                for(var i = 0;i <  window.cmLivechat_socket.onListeners.length;i++)
+                                {
+                                    if(window.cmLivechat_socket.onListeners[i].msg == msg.msg)
+                                        window.cmLivechat_socket.onListeners[i].callbackFn(msg.data);
+                                }
+                            };
+                            window.cmLivechat_socket.ws = websocket;
+
+                            console.log(window.cmLivechat_socket);
+
                             window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
                             window.cmLivechat_socket.on('cmLivechat_message', function(data){
                                 console.log(data);
@@ -1451,7 +1546,55 @@ setTimeout(function()
                                 dataToSend.to = window.cmLivechat_groups[0]._id;
                             setCookie('cmLivechat_chatID',ts);
                             dataToSend.initialData = JSON.stringify(dataToSend.initialData);
-                            window.cmLivechat_socket = io(window.cmLivechat_socketUrl);
+                            window.cmLivechat_socket = {};
+                            window.cmLivechat_socket.onListeners = [];
+                            window.cmLivechat_socket.deferred = [];
+                            window.cmLivechat_socket.on = function(msg,callbackFn)
+                            {
+                                window.cmLivechat_socket.onListeners.push({msg: msg,callbackFn: callbackFn});
+                                console.log(window.cmLivechat_socket.onListeners);
+                            }
+                            window.cmLivechat_socket.emit = function(msg,data)
+                            {
+                                var formedData =
+                                    {
+                                        msg: msg,
+                                        data: data,
+                                        evt: 'emit',
+                                        chan: 'uws_server'
+
+                                    };
+
+                                if(window.cmLivechat_socket.ws != null && (window.cmLivechat_socket.ws.readyState == 1))
+                                    window.cmLivechat_socket.ws.send(JSON.stringify(formedData));
+                                else
+                                    window.cmLivechat_socket.deferred.push(JSON.stringify(formedData));
+
+                            };
+
+                            var websocket = new WebSocket(window.cmLivechat_socketUrl);
+                            websocket.onopen = function (event) {
+                                for(var  i = 0;i <  window.cmLivechat_socket.deferred.length;i++)
+                                {
+                                    window.cmLivechat_socket.ws.send( window.cmLivechat_socket.deferred[i]);
+                                }
+                                window.cmLivechat_socket.deferred = [];
+                            };
+
+                            websocket.onmessage = function(event) {
+                                console.log("MESSAGE RECEIVED");
+                                var msg = JSON.parse(event.data);
+                                console.log(msg);
+                                for(var i = 0;i <  window.cmLivechat_socket.onListeners.length;i++)
+                                {
+                                    if(window.cmLivechat_socket.onListeners[i].msg == msg.msg)
+                                        window.cmLivechat_socket.onListeners[i].callbackFn(msg.data);
+                                }
+                            };
+                            window.cmLivechat_socket.ws = websocket;
+
+                            console.log(window.cmLivechat_socket);
+
                             window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
                             window.cmLivechat_socket.on('cmLivechat_message', function(data){
                                 console.log(data);
