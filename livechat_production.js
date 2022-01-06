@@ -36,7 +36,6 @@ setTimeout(function()
 
                 }
 
-
                 if(typeof jQuery == 'undefined')
                     $('head').append("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>");
 
@@ -227,6 +226,7 @@ setTimeout(function()
                 $('#cmLivechat_iconClosed').css('display','none');
                 $('#cmLivechat_iconOpen').css('display','initial');
                 $('#cmLivechat_container').css('display','none');
+
             });
             $('#cmLivechat_soundOn').click(function()
             {
@@ -254,83 +254,197 @@ setTimeout(function()
                 for(var z = 0;z < messages.length;z++)
                 {
                     var formattedDate = '<span style="font-size:0.6em;">'+messages[z].name+' '+(new Date(messages[z].date).getHours() < 10 ? '0'+new Date(messages[z].date).getHours() : new Date(messages[z].date).getHours())+":"+(new Date(messages[z].date).getMinutes() < 10 ? '0'+new Date(messages[z].date).getMinutes() : new Date(messages[z].date).getMinutes())+"</span><br>";
+
                     if(messages[z].type == 'INCOMING' && messages[z].text != undefined)
                     {
+                        var dlrStatus = "<span style='margin-left:5px;font-size:0.9em;font-weight:bold;' id='"+messages[z].chatID+"'>";
+                        if(messages[z].dlrStatus == 0)
+                            dlrStatus += '🗸';
+                        if(messages[z].dlrStatus == 1)
+                            dlrStatus += '🗸<span style="font-size:0.8em;">🗸</span>';
+                        if(messages[z].dlrStatus == 2)
+                            dlrStatus += '<span style="color:'+templateOptions.livechat.readColor+'">🗸<span style="font-size:0.8em;">🗸</span></span>';
+                        dlrStatus += '</span>';
+                        formattedDate =  '<span style="font-size:0.6em;">'+messages[z].name+' '+(new Date(messages[z].date).getHours() < 10 ? '0'+new Date(messages[z].date).getHours() : new Date(messages[z].date).getHours())+":"+(new Date(messages[z].date).getMinutes() < 10 ? '0'+new Date(messages[z].date).getMinutes() : new Date(messages[z].date).getMinutes())+"</span>"+dlrStatus+"<br>";
                         $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break:break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
 
                     }
                     else
                     {
-                        if(messages[z].text != undefined)
-                            $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
+                        if(messages[z].text != undefined) {
+
+                            var formedDlr = 1;
+                            if ($('#cmLivechat_container').css('display') != 'none') formedDlr = 2;
+                            var formedData = {chatID: messages[z].chatID, dlrStatus:formedDlr};
+                            $('#cmLivechat_chat').append('<span data-cid="'+messages[z].chatID+'" data-dlr="'+formedDlr+'" style="color:' + templateOptions.livechat.crfcColor + ';background-color:' + templateOptions.livechat.crbgColor + ';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">' + formattedDate + messages[z].text + '</span><br style="clear:both;">');
+                            $.post(window.cmLivechat_siteUrl + '/livechat/api/status/update', formedData, function (data) {
+
+                            });
+                        }
                     }
                 }
-                window.cmLivechat_socket = {};
-                window.cmLivechat_socket.onListeners = [];
-                window.cmLivechat_socket.deferred = [];
-                window.cmLivechat_socket.on = function(msg,callbackFn)
-                {
-                    window.cmLivechat_socket.onListeners.push({msg: msg,callbackFn: callbackFn});
-                    console.log(window.cmLivechat_socket.onListeners);
-                }
-                window.cmLivechat_socket.emit = function(msg,data)
-                {
-                    var formedData =
-                        {
-                            msg: msg,
-                            data: data,
-                            evt: 'emit',
-                            chan: 'uws_server'
-
-                        };
-
-                    if(window.cmLivechat_socket.ws != null && (window.cmLivechat_socket.ws.readyState == 1))
-                        window.cmLivechat_socket.ws.send(JSON.stringify(formedData));
-                    else
-                        window.cmLivechat_socket.deferred.push(JSON.stringify(formedData));
-
-                };
-
-                var websocket = new WebSocket(window.cmLivechat_socketUrl);
-                websocket.onopen = function (event) {
-                    for(var  i = 0;i <  window.cmLivechat_socket.deferred.length;i++)
-                    {
-                        window.cmLivechat_socket.ws.send( window.cmLivechat_socket.deferred[i]);
-                    }
+                window.cmLivechat_reconnect_interval_id = null;
+                window.cmLivechat_connect = function() {
+                    window.cmLivechat_socket = {};
+                    window.cmLivechat_socket.onListeners = [];
                     window.cmLivechat_socket.deferred = [];
-                };
-
-                websocket.onmessage = function(event) {
-                    console.log("MESSAGE RECEIVED");
-                    var msg = JSON.parse(event.data);
-                    console.log(msg);
-                    for(var i = 0;i <  window.cmLivechat_socket.onListeners.length;i++)
-                    {
-                        if(window.cmLivechat_socket.onListeners[i].msg == msg.msg)
-                            window.cmLivechat_socket.onListeners[i].callbackFn(msg.data);
+                    window.cmLivechat_socket.on = function (msg, callbackFn) {
+                        window.cmLivechat_socket.onListeners.push({msg: msg, callbackFn: callbackFn});
+                        console.log(window.cmLivechat_socket.onListeners);
                     }
+                    window.cmLivechat_socket.emit = function (msg, data) {
+                        var formedData =
+                            {
+                                msg: msg,
+                                data: data,
+                                evt: 'emit',
+                                chan: 'uws_server'
+
+                            };
+
+                        if (window.cmLivechat_socket.ws != null && (window.cmLivechat_socket.ws.readyState == 1))
+                            window.cmLivechat_socket.ws.send(JSON.stringify(formedData));
+                        else
+                            window.cmLivechat_socket.deferred.push(JSON.stringify(formedData));
+
+                    };
+
+                    var websocket = new WebSocket(window.cmLivechat_socketUrl);
+                    websocket.onopen = function (event) {
+                        for (var i = 0; i < window.cmLivechat_socket.deferred.length; i++) {
+                            window.cmLivechat_socket.ws.send(window.cmLivechat_socket.deferred[i]);
+                        }
+                        window.cmLivechat_socket.deferred = [];
+                        clearInterval(window.cmLivechat_reconnect_interval_id);
+                        window.cmLivechat_reconnect_interval_id = null;
+
+                        $.getJSON(window.cmLivechat_siteUrl+'/livechat/chathistory_reconnect/'+getCookie('cmLivechat_chatID'), function( data ) {
+                            console.log(data);
+                            $('#cmLivechat_chat').html("");
+                            var messages = data.messages;
+                            for(var z = 0;z < messages.length;z++)
+                            {
+                                var formattedDate = '<span style="font-size:0.6em;">'+messages[z].name+' '+(new Date(messages[z].date).getHours() < 10 ? '0'+new Date(messages[z].date).getHours() : new Date(messages[z].date).getHours())+":"+(new Date(messages[z].date).getMinutes() < 10 ? '0'+new Date(messages[z].date).getMinutes() : new Date(messages[z].date).getMinutes())+"</span><br>";
+                                if(messages[z].type == 'INCOMING' && messages[z].text != undefined)
+                                {
+                                    var dlrStatus = "<span style='margin-left:5px;font-size:0.9em;font-weight:bold;' id='"+messages[z].chatID+"'>";
+                                    if(messages[z].dlrStatus == 0)
+                                        dlrStatus += '🗸';
+                                    if(messages[z].dlrStatus == 1)
+                                        dlrStatus += '🗸<span style="font-size:0.8em;">🗸</span>';
+                                    if(messages[z].dlrStatus == 2)
+                                        dlrStatus += '<span style="color:'+templateOptions.livechat.readColor+'">🗸<span style="font-size:0.8em;">🗸</span></span>';
+                                    dlrStatus += '</span>';
+                                    formattedDate =  '<span style="font-size:0.6em;">'+messages[z].name+' '+(new Date(messages[z].date).getHours() < 10 ? '0'+new Date(messages[z].date).getHours() : new Date(messages[z].date).getHours())+":"+(new Date(messages[z].date).getMinutes() < 10 ? '0'+new Date(messages[z].date).getMinutes() : new Date(messages[z].date).getMinutes())+"</span>"+dlrStatus+"<br>";
+                                    $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break:break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
+
+                                }
+                                else
+                                {
+                                    if(messages[z].text != undefined) {
+
+                                        var formedDlr = 1;
+                                        if ($('#cmLivechat_container').css('display') != 'none') formedDlr = 2;
+                                        var formedData = {chatID: messages[z].chatID, dlrStatus:formedDlr};
+                                        $('#cmLivechat_chat').append('<span data-cid="'+messages[z].chatID+'" data-dlr="'+formedDlr+'" style="color:' + templateOptions.livechat.crfcColor + ';background-color:' + templateOptions.livechat.crbgColor + ';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">' + formattedDate + messages[z].text + '</span><br style="clear:both;">');
+                                        $.post(window.cmLivechat_siteUrl + '/livechat/api/status/update', formedData, function (data) {
+
+                                        });
+                                    }
+                                }
+                            }
+                        });
+
+                    };
+
+                    websocket.onmessage = function (event) {
+                        console.log("MESSAGE RECEIVED");
+                        var msg = JSON.parse(event.data);
+                        console.log(msg);
+                        for (var i = 0; i < window.cmLivechat_socket.onListeners.length; i++) {
+                            if (window.cmLivechat_socket.onListeners[i].msg == msg.msg)
+                                window.cmLivechat_socket.onListeners[i].callbackFn(msg.data);
+                        }
+                    };
+                    websocket.onclose = function (event) {
+
+                        console.log("SOCKET CLOSED");
+
+                        console.log(event.code);
+                        for(var i = 0;i < window.cmLivechat_socket.onListeners.length;i++)
+                        {
+                            if(window.cmLivechat_socket.onListeners[i].msg == 'disconnect')
+                                window.cmLivechat_socket.onListeners[i].callbackFn(null);
+                        }
+
+                        if(window.cmLivechat_reconnect_interval_id == null)
+                            window.cmLivechat_reconnect_interval_id = setInterval(function() {
+                                console.log("SOCKET RECONNECTING");
+                                window.cmLivechat_connect();
+
+                            },15000);
+                    };
+                    websocket.onerror = function(event)
+                    {
+                        console.log("SOCKET ERROR");
+                        console.log(event);
+                    };
+                    window.cmLivechat_socket.ws = websocket;
+                    window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
+                    window.cmLivechat_socket.on('cmLivechat_message', function(data){
+                        console.log(data);
+                        setTimeout(function() {
+                            var formedDlr = 1;
+                            if ($('#cmLivechat_container').css('display') != 'none') formedDlr = 2;
+                            var formedData = {chatID: data.chatID, dlrStatus: formedDlr};
+                            $.post(window.cmLivechat_siteUrl + '/livechat/api/status/update', formedData, function (data) {
+
+                            });
+                        },300);
+
+                        var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
+                        $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
+                        var elem = document.getElementById('cmLivechat_chat');
+                        elem.scrollTop = elem.scrollHeight;
+                        window.cmLivechatIsOpen = true;
+                        if(window.cmLivechatIsOpen)
+                        {
+                            $('#cmLivechat_iconClosed').css('display','initial');
+                            $('#cmLivechat_iconOpen').css('display','none');
+                            $('#cmLivechat_container').css('display','initial');
+
+                            $('span[data-cid]').each(function(){
+                                var cid = $(this).data('cid');
+
+                                var formedData = {chatID: cid, dlrStatus:2};
+                                $.post(window.cmLivechat_siteUrl + '/livechat/api/status/update', formedData, function (data) {});
+                                $(this).removeAttr( "data-cid" );
+                                $(this).removeAttr( "data-dlr" );
+                            });
+
+                        }
+                        if(window.cmLivechat_soundWorks)
+                            playAudio();
+                    });
+                    window.cmLivechat_socket.on('cmLivechat_statusUpdate', function(data){
+                        console.log(data);
+                        $('#'+data.chatID).html("");
+                        var formatedDlr = "";
+                        if(data.dlrStatus == 0)
+                            formatedDlr = '🗸';
+                        if(data.dlrStatus == 1)
+                            formatedDlr = '🗸<span style="font-size:0.8em;">🗸</span>';
+                        if(data.dlrStatus == 2)
+                            formatedDlr = '<span style="color:'+templateOptions.livechat.readColor+'">🗸<span style="font-size:0.8em;">🗸</span></span>';
+                        $('#'+data.chatID).html(formatedDlr);
+                    });
+
                 };
-                window.cmLivechat_socket.ws = websocket;
+                window.cmLivechat_connect();
 
                 console.log(window.cmLivechat_socket);
 
-                window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
-                window.cmLivechat_socket.on('cmLivechat_message', function(data){
-                    console.log(data);
-                    var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
-                    $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
-                    var elem = document.getElementById('cmLivechat_chat');
-                    elem.scrollTop = elem.scrollHeight;
-                    window.cmLivechatIsOpen = true;
-                    if(window.cmLivechatIsOpen)
-                    {
-                        $('#cmLivechat_iconClosed').css('display','initial');
-                        $('#cmLivechat_iconOpen').css('display','none');
-                        $('#cmLivechat_container').css('display','initial');
-                    }
-                    if(window.cmLivechat_soundWorks)
-                        playAudio();
-                });
+
                 var input = document.getElementById("cmLivechat_chatMessage");
 
 // Execute a function when the user releases a key on the keyboard
@@ -360,11 +474,10 @@ setTimeout(function()
         });  */
                 $('#cmLivechat_sendChatMessage').click(function()
                 {
-                    var formattedDate = '<span style="font-size:0.6em;">'+(new Date().getHours() < 10 ? '0'+new Date().getHours() : new Date().getHours())+":"+(new Date().getMinutes() < 10 ? '0'+new Date().getMinutes() : new Date().getMinutes())+"</span><br>";
                     //document.getElementById('cmLivechat_chatMessage').style.height = '20px';
                     //document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
                     if($('#cmLivechat_chatMessage').val().trim() == "") return;
-                    $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
+
 
                     var dataToSend = {};
                     var ts = Math.round((new Date()).getTime() / 1000).toString()+
@@ -382,6 +495,10 @@ setTimeout(function()
                     dataToSend.initialData = [];
                     dataToSend.from = "";
                     dataToSend.initialChatID = getCookie('cmLivechat_chatID');
+                    dataToSend.dlrStatus = 0;
+                    var formattedDate = '<span style="font-size:0.6em;">'+(new Date().getHours() < 10 ? '0'+new Date().getHours() : new Date().getHours())+":"+(new Date().getMinutes() < 10 ? '0'+new Date().getMinutes() : new Date().getMinutes())+"</span><span style='margin-left:5px;font-size:0.9em;font-weight:bold;' id='"+ts+"'>🗸</span>"+"<br>";
+                    $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
+
 
                     $('#cmLivechat_chatMessage').val("");
                     var elem = document.getElementById('cmLivechat_chat');
@@ -505,11 +622,17 @@ setTimeout(function()
                     $('#cmLivechat_iconClosed').css('display','initial');
                     $('#cmLivechat_iconOpen').css('display','none');
                     $('#cmLivechat_container').css('display','initial');
+                    $('span[data-cid]').each(function(){
+                        var cid = $(this).data('cid');
+
+                        var formedData = {chatID: cid, dlrStatus:2};
+                        $.post(window.cmLivechat_siteUrl + '/livechat/api/status/update', formedData, function (data) {});
+                        $(this).removeAttr( "data-cid" );
+                        $(this).removeAttr( "data-dlr" );
+                    });
                     var objDiv = document.getElementById("cmLivechat_chat");
                     if(objDiv)
                         objDiv.scrollTop = objDiv.scrollHeight;
-
-
 
                 }
                 if(window.cmLivechatIsOpen == false)
@@ -518,12 +641,11 @@ setTimeout(function()
                     $('#cmLivechat_iconOpen').css('display','initial');
                     $('#cmLivechat_container').css('display','none');
                     $('#cmLivechat_igDropper').css('display','none');
-                    if($('#cmLivechat_icDropperNWH').css('display') == 'none')
+                    if($('#cmLivechat_icNWHDropper').css('display') == 'none')
                     {
                         $('#cmLivechat_icDropper').css('display','block');
-                        $('#cmLivechat_icDropperNWH').css('display','none');
+                        $('#cmLivechat_icNWHDropper').css('display','none');
                     }
-
                     $('#cmLivechat_container').css('bottom','27%');
                     $('#cmLivechat_container').css('height','405px');
 
@@ -541,6 +663,14 @@ setTimeout(function()
                 $('#cmLivechat_iconClosed').css('display','initial');
                 $('#cmLivechat_iconOpen').css('display','none');
                 $('#cmLivechat_container').css('display','initial');
+                $('span[data-cid]').each(function(){
+                    var cid = $(this).data('cid');
+
+                    var formedData = {chatID: cid, dlrStatus:2};
+                    $.post(window.cmLivechat_siteUrl + '/livechat/api/status/update', formedData, function (data) {});
+                    $(this).removeAttr( "data-cid" );
+                    $(this).removeAttr( "data-dlr" );
+                });
                 var objDiv = document.getElementById("cmLivechat_chat");
                 if(objDiv)
                     objDiv.scrollTop = objDiv.scrollHeight;
@@ -593,7 +723,7 @@ setTimeout(function()
                     objDiv.scrollTop = objDiv.scrollHeight;
                 $('#cmLivechat_igDropper').css('display','none');
                 $('#cmLivechat_icDropper').css('display','block');
-                $('#cmLivechat_icDropperNWH').css('display','none');
+                $('#cmLivechat_icNWHDropper').css('display','none');
                 $('#cmLivechat_container').css('bottom','27%');
                 $('#cmLivechat_container').css('height','405px');
                 window.cmLivechatIsOpen = true;
@@ -1000,74 +1130,153 @@ setTimeout(function()
                                 dataToSend.to = window.cmLivechat_groups[0]._id;
                             setCookie('cmLivechat_chatID',ts);
                             dataToSend.initialData = JSON.stringify(dataToSend.initialData);
-                            window.cmLivechat_socket = {};
-                            window.cmLivechat_socket.onListeners = [];
-                            window.cmLivechat_socket.deferred = [];
-                            window.cmLivechat_socket.on = function(msg,callbackFn)
-                            {
-                                window.cmLivechat_socket.onListeners.push({msg: msg,callbackFn: callbackFn});
-                                console.log(window.cmLivechat_socket.onListeners);
-                            }
-                            window.cmLivechat_socket.emit = function(msg,data)
-                            {
-                                var formedData =
-                                    {
-                                        msg: msg,
-                                        data: data,
-                                        evt: 'emit',
-                                        chan: 'uws_server'
-
-                                    };
-
-                                if(window.cmLivechat_socket.ws != null && (window.cmLivechat_socket.ws.readyState == 1))
-                                    window.cmLivechat_socket.ws.send(JSON.stringify(formedData));
-                                else
-                                    window.cmLivechat_socket.deferred.push(JSON.stringify(formedData));
-
-                            };
-
-                            var websocket = new WebSocket(window.cmLivechat_socketUrl);
-                            websocket.onopen = function (event) {
-                                for(var  i = 0;i <  window.cmLivechat_socket.deferred.length;i++)
-                                {
-                                    window.cmLivechat_socket.ws.send( window.cmLivechat_socket.deferred[i]);
-                                }
+                            window.cmLivechat_reconnect_interval_id = null;
+                            window.cmLivechat_connect = function() {
+                                window.cmLivechat_socket = {};
+                                window.cmLivechat_socket.onListeners = [];
                                 window.cmLivechat_socket.deferred = [];
-                            };
-
-                            websocket.onmessage = function(event) {
-                                console.log("MESSAGE RECEIVED");
-                                var msg = JSON.parse(event.data);
-                                console.log(msg);
-                                for(var i = 0;i <  window.cmLivechat_socket.onListeners.length;i++)
-                                {
-                                    if(window.cmLivechat_socket.onListeners[i].msg == msg.msg)
-                                        window.cmLivechat_socket.onListeners[i].callbackFn(msg.data);
+                                window.cmLivechat_socket.on = function (msg, callbackFn) {
+                                    window.cmLivechat_socket.onListeners.push({msg: msg, callbackFn: callbackFn});
+                                    console.log(window.cmLivechat_socket.onListeners);
                                 }
-                            };
-                            window.cmLivechat_socket.ws = websocket;
+                                window.cmLivechat_socket.emit = function (msg, data) {
+                                    var formedData =
+                                        {
+                                            msg: msg,
+                                            data: data,
+                                            evt: 'emit',
+                                            chan: 'uws_server'
 
+                                        };
+
+                                    if (window.cmLivechat_socket.ws != null && (window.cmLivechat_socket.ws.readyState == 1))
+                                        window.cmLivechat_socket.ws.send(JSON.stringify(formedData));
+                                    else
+                                        window.cmLivechat_socket.deferred.push(JSON.stringify(formedData));
+
+                                };
+
+                                var websocket = new WebSocket(window.cmLivechat_socketUrl);
+                                websocket.onopen = function (event) {
+                                    for (var i = 0; i < window.cmLivechat_socket.deferred.length; i++) {
+                                        window.cmLivechat_socket.ws.send(window.cmLivechat_socket.deferred[i]);
+                                    }
+                                    window.cmLivechat_socket.deferred = [];
+                                    clearInterval(window.cmLivechat_reconnect_interval_id);
+                                    window.cmLivechat_reconnect_interval_id = null;
+                                    $.getJSON(window.cmLivechat_siteUrl+'/livechat/chathistory_reconnect/'+getCookie('cmLivechat_chatID'), function( data ) {
+                                        console.log(data);
+                                        $('#cmLivechat_chat').html("");
+                                        var messages = data.messages;
+                                        for(var z = 0;z < messages.length;z++) {
+                                            var formattedDate = '<span style="font-size:0.6em;">' + messages[z].name + ' ' + (new Date(messages[z].date).getHours() < 10 ? '0' + new Date(messages[z].date).getHours() : new Date(messages[z].date).getHours()) + ":" + (new Date(messages[z].date).getMinutes() < 10 ? '0' + new Date(messages[z].date).getMinutes() : new Date(messages[z].date).getMinutes()) + "</span><br>";
+                                            if (messages[z].type == 'INCOMING' && messages[z].text != undefined) {
+                                                var dlrStatus = "<span style='margin-left:5px;font-size:0.9em;font-weight:bold;' id='" + messages[z].chatID + "'>";
+                                                if (messages[z].dlrStatus == 0)
+                                                    dlrStatus += '🗸';
+                                                if (messages[z].dlrStatus == 1)
+                                                    dlrStatus += '🗸<span style="font-size:0.8em;">🗸</span>';
+                                                if (messages[z].dlrStatus == 2)
+                                                    dlrStatus += '<span style="color:' + templateOptions.livechat.readColor + '">🗸<span style="font-size:0.8em;">🗸</span></span>';
+                                                formattedDate = '<span style="font-size:0.6em;">' + messages[z].name + ' ' + (new Date(messages[z].date).getHours() < 10 ? '0' + new Date(messages[z].date).getHours() : new Date(messages[z].date).getHours()) + ":" + (new Date(messages[z].date).getMinutes() < 10 ? '0' + new Date(messages[z].date).getMinutes() : new Date(messages[z].date).getMinutes()) + "</span>" + dlrStatus + "<br>";
+                                                $('#cmLivechat_chat').append('<span style="color:' + templateOptions.livechat.csfcColor + ';background-color: ' + templateOptions.livechat.csbgColor + ';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break:break-word;">' + formattedDate + messages[z].text + '</span><br style="clear:both;">');
+
+                                            }
+                                            else {
+                                                if (messages[z].text != undefined) {
+
+                                                    var formedDlr = 1;
+                                                    if ($('#cmLivechat_container').css('display') != 'none') formedDlr = 2;
+                                                    var formedData = {chatID: messages[z].chatID, dlrStatus: formedDlr};
+                                                    $('#cmLivechat_chat').append('<span data-cid="' + messages[z].chatID + '" data-dlr="' + formedDlr + '" style="color:' + templateOptions.livechat.crfcColor + ';background-color:' + templateOptions.livechat.crbgColor + ';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">' + formattedDate + messages[z].text + '</span><br style="clear:both;">');
+                                                    $.post(window.cmLivechat_siteUrl + '/livechat/api/status/update', formedData, function (data) {
+
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    });
+
+
+                                };
+
+                                websocket.onmessage = function (event) {
+                                    console.log("MESSAGE RECEIVED");
+                                    var msg = JSON.parse(event.data);
+                                    console.log(msg);
+                                    for (var i = 0; i < window.cmLivechat_socket.onListeners.length; i++) {
+                                        if (window.cmLivechat_socket.onListeners[i].msg == msg.msg)
+                                            window.cmLivechat_socket.onListeners[i].callbackFn(msg.data);
+                                    }
+                                };
+                                websocket.onclose = function (event) {
+
+                                    console.log("SOCKET CLOSED");
+
+                                    console.log(event.code);
+                                    for(var i = 0;i < window.cmLivechat_socket.onListeners.length;i++)
+                                    {
+                                        if(window.cmLivechat_socket.onListeners[i].msg == 'disconnect')
+                                            window.cmLivechat_socket.onListeners[i].callbackFn(null);
+                                    }
+
+                                    if(window.cmLivechat_reconnect_interval_id == null)
+                                        window.cmLivechat_reconnect_interval_id = setInterval(function() {
+                                            console.log("SOCKET RECONNECTING");
+                                            window.cmLivechat_connect();
+
+                                        },15000);
+                                };
+                                websocket.onerror = function(event)
+                                {
+                                    console.log("SOCKET ERROR");
+                                    console.log(event);
+                                };
+                                window.cmLivechat_socket.ws = websocket;
+                                window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
+                                window.cmLivechat_socket.on('cmLivechat_message', function(data){
+                                    console.log(data);
+                                    setTimeout(function() {
+                                        var formedDlr = 1;
+                                        if ($('#cmLivechat_container').css('display') != 'none') formedDlr = 2;
+                                        var formedData = {chatID: data.chatID, dlrStatus: formedDlr};
+                                        $.post(window.cmLivechat_siteUrl + '/livechat/api/status/update', formedData, function (data) {
+
+                                        });
+                                    },300);
+                                    var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
+                                    $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
+                                    var elem = document.getElementById('cmLivechat_chat');
+                                    elem.scrollTop = elem.scrollHeight;
+
+                                    window.cmLivechatIsOpen = true;
+                                    if(window.cmLivechatIsOpen)
+                                    {
+                                        $('#cmLivechat_iconClosed').css('display','initial');
+                                        $('#cmLivechat_iconOpen').css('display','none');
+                                        $('#cmLivechat_container').css('display','initial');
+                                    }
+                                    if(window.cmLivechat_soundWorks)
+                                        playAudio();
+
+                                });
+                                window.cmLivechat_socket.on('cmLivechat_statusUpdate', function(data){
+                                    console.log(data);
+                                    $('#'+data.chatID).html("");
+                                    var formatedDlr = "";
+                                    if(data.dlrStatus == 0)
+                                        formatedDlr = '🗸';
+                                    if(data.dlrStatus == 1)
+                                        formatedDlr = '🗸<span style="font-size:0.8em;">🗸</span>';
+                                    if(data.dlrStatus == 2)
+                                        formatedDlr = '<span style="color:'+templateOptions.livechat.readColor+'">🗸<span style="font-size:0.8em;">🗸</span></span>';
+                                    $('#'+data.chatID).html(formatedDlr);
+                                });
+                            };
+                            window.cmLivechat_connect();
                             console.log(window.cmLivechat_socket);
 
-                            window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
-                            window.cmLivechat_socket.on('cmLivechat_message', function(data){
-                                console.log(data);
-                                var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
-                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
-                                var elem = document.getElementById('cmLivechat_chat');
-                                elem.scrollTop = elem.scrollHeight;
 
-                                window.cmLivechatIsOpen = true;
-                                if(window.cmLivechatIsOpen)
-                                {
-                                    $('#cmLivechat_iconClosed').css('display','initial');
-                                    $('#cmLivechat_iconOpen').css('display','none');
-                                    $('#cmLivechat_container').css('display','initial');
-                                }
-                                if(window.cmLivechat_soundWorks)
-                                    playAudio();
-
-                            });
 
                             $.post(window.cmLivechat_siteUrl+'/livechat/api/create',dataToSend, function( data ) {
                                 console.log("POSTED");
@@ -1107,13 +1316,11 @@ setTimeout(function()
                                 });  */
                                 $('#cmLivechat_sendChatMessage').click(function()
                                 {
-                                    var formattedDate = '<span style="font-size:0.6em;">'+(new Date().getHours() < 10 ? '0'+new Date().getHours() : new Date().getHours())+":"+(new Date().getMinutes() < 10 ? '0'+new Date().getMinutes() : new Date().getMinutes())+"</span><br>";
+
                                     //document.getElementById('cmLivechat_chatMessage').style.height = '20px';
                                     //document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
 
                                     if($('#cmLivechat_chatMessage').val().trim() == "") return;
-                                    $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
-
                                     var dataToSend = {};
                                     var ts = Math.round((new Date()).getTime() / 1000).toString()+
                                         Math.floor(Math.random() * 101).toString();
@@ -1130,6 +1337,9 @@ setTimeout(function()
                                     dataToSend.initialData = [];
                                     dataToSend.from = "";
                                     dataToSend.initialChatID = getCookie('cmLivechat_chatID');
+                                    dataToSend.dlrStatus = 0;
+                                    var formattedDate = '<span style="font-size:0.6em;">'+(new Date().getHours() < 10 ? '0'+new Date().getHours() : new Date().getHours())+":"+(new Date().getMinutes() < 10 ? '0'+new Date().getMinutes() : new Date().getMinutes())+"</span><span style='margin-left:5px;font-size:0.9em;font-weight:bold;' id='"+ts+"'>🗸</span>"+"<br>";
+                                    $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
 
                                     $('#cmLivechat_chatMessage').val("");
                                     var elem = document.getElementById('cmLivechat_chat');
@@ -1546,74 +1756,158 @@ setTimeout(function()
                                 dataToSend.to = window.cmLivechat_groups[0]._id;
                             setCookie('cmLivechat_chatID',ts);
                             dataToSend.initialData = JSON.stringify(dataToSend.initialData);
-                            window.cmLivechat_socket = {};
-                            window.cmLivechat_socket.onListeners = [];
-                            window.cmLivechat_socket.deferred = [];
-                            window.cmLivechat_socket.on = function(msg,callbackFn)
-                            {
-                                window.cmLivechat_socket.onListeners.push({msg: msg,callbackFn: callbackFn});
-                                console.log(window.cmLivechat_socket.onListeners);
-                            }
-                            window.cmLivechat_socket.emit = function(msg,data)
-                            {
-                                var formedData =
-                                    {
-                                        msg: msg,
-                                        data: data,
-                                        evt: 'emit',
-                                        chan: 'uws_server'
-
-                                    };
-
-                                if(window.cmLivechat_socket.ws != null && (window.cmLivechat_socket.ws.readyState == 1))
-                                    window.cmLivechat_socket.ws.send(JSON.stringify(formedData));
-                                else
-                                    window.cmLivechat_socket.deferred.push(JSON.stringify(formedData));
-
-                            };
-
-                            var websocket = new WebSocket(window.cmLivechat_socketUrl);
-                            websocket.onopen = function (event) {
-                                for(var  i = 0;i <  window.cmLivechat_socket.deferred.length;i++)
-                                {
-                                    window.cmLivechat_socket.ws.send( window.cmLivechat_socket.deferred[i]);
-                                }
+                            window.cmLivechat_reconnect_interval_id = null;
+                            window.cmLivechat_connect = function() {
+                                window.cmLivechat_socket = {};
+                                window.cmLivechat_socket.onListeners = [];
                                 window.cmLivechat_socket.deferred = [];
-                            };
-
-                            websocket.onmessage = function(event) {
-                                console.log("MESSAGE RECEIVED");
-                                var msg = JSON.parse(event.data);
-                                console.log(msg);
-                                for(var i = 0;i <  window.cmLivechat_socket.onListeners.length;i++)
-                                {
-                                    if(window.cmLivechat_socket.onListeners[i].msg == msg.msg)
-                                        window.cmLivechat_socket.onListeners[i].callbackFn(msg.data);
+                                window.cmLivechat_socket.on = function (msg, callbackFn) {
+                                    window.cmLivechat_socket.onListeners.push({msg: msg, callbackFn: callbackFn});
+                                    console.log(window.cmLivechat_socket.onListeners);
                                 }
+                                window.cmLivechat_socket.emit = function (msg, data) {
+                                    var formedData =
+                                        {
+                                            msg: msg,
+                                            data: data,
+                                            evt: 'emit',
+                                            chan: 'uws_server'
+
+                                        };
+
+                                    if (window.cmLivechat_socket.ws != null && (window.cmLivechat_socket.ws.readyState == 1))
+                                        window.cmLivechat_socket.ws.send(JSON.stringify(formedData));
+                                    else
+                                        window.cmLivechat_socket.deferred.push(JSON.stringify(formedData));
+
+                                };
+
+                                var websocket = new WebSocket(window.cmLivechat_socketUrl);
+                                websocket.onopen = function (event) {
+                                    for (var i = 0; i < window.cmLivechat_socket.deferred.length; i++) {
+                                        window.cmLivechat_socket.ws.send(window.cmLivechat_socket.deferred[i]);
+                                    }
+                                    window.cmLivechat_socket.deferred = [];
+                                    clearInterval(window.cmLivechat_reconnect_interval_id);
+                                    window.cmLivechat_reconnect_interval_id = null;
+                                    $.getJSON(window.cmLivechat_siteUrl+'/livechat/chathistory_reconnect/'+getCookie('cmLivechat_chatID'), function( data ) {
+                                        console.log(data);
+                                        $('#cmLivechat_chat').html("");
+                                        var messages = data.messages;
+                                        for(var z = 0;z < messages.length;z++)
+                                        {
+                                            var formattedDate = '<span style="font-size:0.6em;">'+messages[z].name+' '+(new Date(messages[z].date).getHours() < 10 ? '0'+new Date(messages[z].date).getHours() : new Date(messages[z].date).getHours())+":"+(new Date(messages[z].date).getMinutes() < 10 ? '0'+new Date(messages[z].date).getMinutes() : new Date(messages[z].date).getMinutes())+"</span><br>";
+                                            if(messages[z].type == 'INCOMING' && messages[z].text != undefined)
+                                            {
+                                                var dlrStatus = "<span style='margin-left:5px;font-size:0.9em;font-weight:bold;' id='"+messages[z].chatID+"'>";
+                                                if(messages[z].dlrStatus == 0)
+                                                    dlrStatus += '🗸';
+                                                if(messages[z].dlrStatus == 1)
+                                                    dlrStatus += '🗸<span style="font-size:0.8em;">🗸</span>';
+                                                if(messages[z].dlrStatus == 2)
+                                                    dlrStatus += '<span style="color:'+templateOptions.livechat.readColor+'">🗸<span style="font-size:0.8em;">🗸</span></span>';
+                                                dlrStatus += '</span>';
+                                                formattedDate =  '<span style="font-size:0.6em;">'+messages[z].name+' '+(new Date(messages[z].date).getHours() < 10 ? '0'+new Date(messages[z].date).getHours() : new Date(messages[z].date).getHours())+":"+(new Date(messages[z].date).getMinutes() < 10 ? '0'+new Date(messages[z].date).getMinutes() : new Date(messages[z].date).getMinutes())+"</span>"+dlrStatus+"<br>";
+                                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break:break-word;">'+formattedDate+messages[z].text+'</span><br style="clear:both;">');
+
+                                            }
+                                            else
+                                            {
+                                                if(messages[z].text != undefined) {
+
+                                                    var formedDlr = 1;
+                                                    if ($('#cmLivechat_container').css('display') != 'none') formedDlr = 2;
+                                                    var formedData = {chatID: messages[z].chatID, dlrStatus:formedDlr};
+                                                    $('#cmLivechat_chat').append('<span data-cid="'+messages[z].chatID+'" data-dlr="'+formedDlr+'" style="color:' + templateOptions.livechat.crfcColor + ';background-color:' + templateOptions.livechat.crbgColor + ';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">' + formattedDate + messages[z].text + '</span><br style="clear:both;">');
+                                                    $.post(window.cmLivechat_siteUrl + '/livechat/api/status/update', formedData, function (data) {
+
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    });
+
+
+                                };
+
+                                websocket.onmessage = function (event) {
+                                    console.log("MESSAGE RECEIVED");
+                                    var msg = JSON.parse(event.data);
+                                    console.log(msg);
+                                    for (var i = 0; i < window.cmLivechat_socket.onListeners.length; i++) {
+                                        if (window.cmLivechat_socket.onListeners[i].msg == msg.msg)
+                                            window.cmLivechat_socket.onListeners[i].callbackFn(msg.data);
+                                    }
+                                };
+                                websocket.onclose = function (event) {
+
+                                    console.log("SOCKET CLOSED");
+
+                                    console.log(event.code);
+                                    for(var i = 0;i < window.cmLivechat_socket.onListeners.length;i++)
+                                    {
+                                        if(window.cmLivechat_socket.onListeners[i].msg == 'disconnect')
+                                            window.cmLivechat_socket.onListeners[i].callbackFn(null);
+                                    }
+
+                                    if(window.cmLivechat_reconnect_interval_id == null)
+                                        window.cmLivechat_reconnect_interval_id = setInterval(function() {
+                                            console.log("SOCKET RECONNECTING");
+                                            window.cmLivechat_connect();
+
+                                        },15000);
+                                };
+                                websocket.onerror = function(event)
+                                {
+                                    console.log("SOCKET ERROR");
+                                    console.log(event);
+                                };
+                                window.cmLivechat_socket.ws = websocket;
+                                window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
+                                window.cmLivechat_socket.on('cmLivechat_message', function(data){
+                                    console.log(data);
+                                    setTimeout(function() {
+                                        var formedDlr = 1;
+                                        if ($('#cmLivechat_container').css('display') != 'none') formedDlr = 2;
+                                        var formedData = {chatID: data.chatID, dlrStatus: formedDlr};
+                                        $.post(window.cmLivechat_siteUrl + '/livechat/api/status/update', formedData, function (data) {
+
+                                        });
+                                    },300);
+                                    var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
+                                    $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
+                                    var elem = document.getElementById('cmLivechat_chat');
+                                    elem.scrollTop = elem.scrollHeight;
+
+                                    window.cmLivechatIsOpen = true;
+                                    if(window.cmLivechatIsOpen)
+                                    {
+                                        $('#cmLivechat_iconClosed').css('display','initial');
+                                        $('#cmLivechat_iconOpen').css('display','none');
+                                        $('#cmLivechat_container').css('display','initial');
+                                    }
+                                    if(window.cmLivechat_soundWorks)
+                                        playAudio();
+
+                                });
+                                window.cmLivechat_socket.on('cmLivechat_statusUpdate', function(data){
+                                    console.log(data);
+                                    $('#'+data.chatID).html("");
+                                    var formatedDlr = "";
+                                    if(data.dlrStatus == 0)
+                                        formatedDlr = '🗸';
+                                    if(data.dlrStatus == 1)
+                                        formatedDlr = '🗸<span style="font-size:0.8em;">🗸</span>';
+                                    if(data.dlrStatus == 2)
+                                        formatedDlr = '<span style="color:'+templateOptions.livechat.readColor+'">🗸<span style="font-size:0.8em;">🗸</span></span>';
+                                    $('#'+data.chatID).html(formatedDlr);
+                                });
                             };
-                            window.cmLivechat_socket.ws = websocket;
+                            window.cmLivechat_connect();
 
                             console.log(window.cmLivechat_socket);
 
-                            window.cmLivechat_socket.emit('cmLivechat_Online',{chatID: getCookie('cmLivechat_chatID')});
-                            window.cmLivechat_socket.on('cmLivechat_message', function(data){
-                                console.log(data);
-                                var formattedDate = '<span style="font-size:0.6em;">'+data.name+' '+(new Date(data.date).getHours() < 10 ? '0'+new Date(data.date).getHours() : new Date(data.date).getHours())+":"+(new Date(data.date).getMinutes() < 10 ? '0'+new Date(data.date).getMinutes() : new Date(data.date).getMinutes())+"</span><br>";
-                                $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.crfcColor+';background-color:'+templateOptions.livechat.crbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:left;position:relative;margin-right:30px; word-break: break-word;">'+formattedDate+data.text+'</span><br style="clear:both;">');
-                                var elem = document.getElementById('cmLivechat_chat');
-                                elem.scrollTop = elem.scrollHeight;
 
-                                window.cmLivechatIsOpen = true;
-                                if(window.cmLivechatIsOpen)
-                                {
-                                    $('#cmLivechat_iconClosed').css('display','initial');
-                                    $('#cmLivechat_iconOpen').css('display','none');
-                                    $('#cmLivechat_container').css('display','initial');
-                                }
-                                if(window.cmLivechat_soundWorks)
-                                    playAudio();
-
-                            });
 
                             $.post(window.cmLivechat_siteUrl+'/livechat/api/create',dataToSend, function( data ) {
                                 console.log("POSTED");
@@ -1651,13 +1945,11 @@ setTimeout(function()
                                 });      */
                                 $('#cmLivechat_sendChatMessage').click(function()
                                 {
-                                    var formattedDate = '<span style="font-size:0.6em;">'+(new Date().getHours() < 10 ? '0'+new Date().getHours() : new Date().getHours())+":"+(new Date().getMinutes() < 10 ? '0'+new Date().getMinutes() : new Date().getMinutes())+"</span><br>";
+
                                     //document.getElementById('cmLivechat_chatMessage').style.height = '20px';
                                     //document.getElementById('cmLivechat_chatMessage').style.height = 'auto';
 
                                     if($('#cmLivechat_chatMessage').val().trim() == "") return;
-                                    $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
-
                                     var dataToSend = {};
                                     var ts = Math.round((new Date()).getTime() / 1000).toString()+
                                         Math.floor(Math.random() * 101).toString();
@@ -1674,6 +1966,9 @@ setTimeout(function()
                                     dataToSend.initialData = [];
                                     dataToSend.from = "";
                                     dataToSend.initialChatID = getCookie('cmLivechat_chatID');
+                                    dataToSend.dlrStatus = 0;
+                                    var formattedDate = '<span style="font-size:0.6em;">'+(new Date().getHours() < 10 ? '0'+new Date().getHours() : new Date().getHours())+":"+(new Date().getMinutes() < 10 ? '0'+new Date().getMinutes() : new Date().getMinutes())+"</span><span style='margin-left:5px;font-size:0.9em;font-weight:bold;' id='"+ts+"'>🗸</span>"+"<br>";
+                                    $('#cmLivechat_chat').append('<span style="color:'+templateOptions.livechat.csfcColor+';background-color: '+templateOptions.livechat.csbgColor+';font-size: 0.8em;padding:5px;margin:5px;border-radius:5px;display:inline-block;float:right;position:relative;margin-left:30px; word-break: break-word;">'+formattedDate+$('#cmLivechat_chatMessage').val().replace(/(?:\r\n|\r|\n)/g, '<br>')+'</span><br style="clear:both;">');
 
                                     $('#cmLivechat_chatMessage').val("");
                                     var elem = document.getElementById('cmLivechat_chat');
@@ -2308,8 +2603,6 @@ setTimeout(function()
 
                 $('#cmLivechat_container').css('bottom','27%');
                 $('#cmLivechat_container').css('height','405px');
-
-
             });
             $('#cmLivechat_soundOn').click(function()
             {
